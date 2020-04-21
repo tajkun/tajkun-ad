@@ -47,6 +47,7 @@ eureka:
       defaultZone: http://server1:8000/eureka/,http://server2:8001/eureka/
 
 
+
 # eureka server 单节点配置
 #spring:
 #  application:
