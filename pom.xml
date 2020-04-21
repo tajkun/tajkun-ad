@@ -12,6 +12,7 @@
     <modules>
         <module>tajkun-ad-registry</module>
         <module>tajkun-ad-gateway</module>
+        <module>tajkun-ad-common</module>
     </modules>
 
     <name>tajkun-ad</name>
