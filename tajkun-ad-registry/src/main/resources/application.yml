@@ -1,0 +1,64 @@
+# eureka server 集群配置
+---
+spring:
+  application:
+    name: tajkun-ad-registry
+  profiles: server1
+
+server:
+  port: 8000
+
+eureka:
+  instance:
+    hostname: server1  # 因为是单机，使用同一个ip地址注册会报错，这里修改系统hosts文件，配置ip与主机名server的映射
+    prefer-ip-address: false  # 因为是单节点 不能使用ip地址注册
+  client:
+    service-url:
+      defaultZone: http://server2:8001/eureka/,http://server3:8002/eureka/
+
+---
+spring:
+  application:
+    name: tajkun-ad-registry
+  profiles: server2
+server:
+  port: 8001
+eureka:
+  instance:
+    hostname: server2
+    prefer-ip-address: false  # 因为是单节点 不能使用ip地址注册
+  client:
+    service-url:
+      defaultZone: http://server1:8000/eureka/,http://server3:8002/eureka/
+
+---
+spring:
+  application:
+    name: tajkun-ad-registry
+  profiles: server3
+server:
+  port: 8002
+eureka:
+  instance:
+    hostname: server3
+    prefer-ip-address: false  # 因为是单节点 不能使用ip地址注册
+  client:
+    service-url:
+      defaultZone: http://server1:8000/eureka/,http://server2:8001/eureka/
+
+
+# eureka server 单节点配置
+#spring:
+#  application:
+#    name: tajkun-ad-registry
+#
+#server:
+#  port: 8000
+#eureka:
+#  instance:
+#    hostname: localhost
+#  client:
+#    fetch-registry: false        # 默认true，现在是单节点的eurekaserver，不需要拉取其他server
+#    register-with-eureka: false  # 默认true，是否把自己注册到注册中心，因为只有一个eurekaserver，他自己就是注册中心，无需注册
+#    service-url:
+#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
