@@ -1,5 +1,23 @@
-# eureka server 集群配置
+# eureka server 单节点配置
+spring:
+  application:
+    name: tajkun-ad-registry
+
+server:
+  port: 8000
+eureka:
+  instance:
+    hostname: localhost
+  client:
+    fetch-registry: false        # 默认true，现在是单节点的eurekaserver，不需要拉取其他server
+    register-with-eureka: false  # 默认true，是否把自己注册到注册中心，因为只有一个eurekaserver，他自己就是注册中心，无需注册
+    service-url:
+      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/
+
+
+
 ---
+# eureka server 集群配置
 spring:
   application:
     name: tajkun-ad-registry
@@ -45,21 +63,3 @@ eureka:
   client:
     service-url:
       defaultZone: http://server1:8000/eureka/,http://server2:8001/eureka/
-
-
-
-# eureka server 单节点配置
-#spring:
-#  application:
-#    name: tajkun-ad-registry
-#
-#server:
-#  port: 8000
-#eureka:
-#  instance:
-#    hostname: localhost
-#  client:
-#    fetch-registry: false        # 默认true，现在是单节点的eurekaserver，不需要拉取其他server
-#    register-with-eureka: false  # 默认true，是否把自己注册到注册中心，因为只有一个eurekaserver，他自己就是注册中心，无需注册
-#    service-url:
-#      defaultZone: http://${eureka.instance.hostname}:${server.port}/eureka/

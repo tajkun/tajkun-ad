@@ -11,10 +11,11 @@
     <version>1.0-SNAPSHOT</version>
     <modules>
         <module>tajkun-ad-registry</module>
+        <module>tajkun-ad-gateway</module>
     </modules>
 
     <name>tajkun-ad</name>
-    <description>Project For Tajkun Ad With SpringCloud</description>
+    <description>Project For tajkun-ad With SpringCloud</description>
 
     <parent>
         <groupId>org.springframework.boot</groupId>
@@ -31,7 +32,7 @@
         <dependency>
             <groupId>org.projectlombok</groupId>
             <artifactId>lombok</artifactId>
-            <version>1.16.18</version>
+            <version>1.18.8</version>
         </dependency>
         <dependency>
             <groupId>org.springframework.boot</groupId>

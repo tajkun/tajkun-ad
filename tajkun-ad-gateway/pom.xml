@@ -9,17 +9,21 @@
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
-    <artifactId>tajkun-ad-registry</artifactId>
+    <artifactId>tajkun-ad-gateway</artifactId>
     <version>1.0-SNAPSHOT</version>
     <packaging>jar</packaging>
 
-    <name>tajkun-ad-registry</name>
-    <description>Project for registry with Spring Cloud Eureka</description>
+    <name>tajkun-ad-gateway</name>
+    <description>Project for gateway with Spring Cloud Zuul</description>
 
     <dependencies>
         <dependency>
             <groupId>org.springframework.cloud</groupId>
-            <artifactId>spring-cloud-starter-netflix-eureka-server</artifactId>
+            <artifactId>spring-cloud-starter-netflix-eureka-client</artifactId>
+        </dependency>
+        <dependency>
+            <groupId>org.springframework.cloud</groupId>
+            <artifactId>spring-cloud-starter-netflix-zuul</artifactId>
         </dependency>
     </dependencies>
 
@@ -31,6 +35,5 @@
             </plugin>
         </plugins>
     </build>
-
 
 </project>
