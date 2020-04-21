@@ -13,6 +13,7 @@
         <module>tajkun-ad-registry</module>
         <module>tajkun-ad-gateway</module>
         <module>tajkun-ad-common</module>
+        <module>tajkun-ad-delivery</module>
     </modules>
 
     <name>tajkun-ad</name>
