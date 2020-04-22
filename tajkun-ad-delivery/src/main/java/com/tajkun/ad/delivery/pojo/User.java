@@ -10,7 +10,7 @@ import java.util.Date;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 用户
  * @author: Jiakun
  * @create: 2020-04-22 09:52
  **/
@@ -47,6 +47,7 @@ public class User {
         this.token = token;
         this.userStatus = CommonStatus.VALID.getStatusCode();
         this.createTime = new Date();
+        this.updateTime = this.createTime;
     }
 
 }
