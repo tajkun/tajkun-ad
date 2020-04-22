@@ -28,8 +28,9 @@ public class Creative {
     @Column(name = "name", nullable = false)
     private String name;
 
+    // 视频 图片 文字...
     @Column(name = "type", nullable = false)
-    private Integer type;  // 视频 图片 文字...
+    private Integer type;
 
     // 物料类型，比如图片可以是bmp, jpg等
     @Column(name = "material_type", nullable = false)
@@ -40,6 +41,7 @@ public class Creative {
 
     @Column(name = "width", nullable = false)
     private Integer width;
+
     // 物料大小
     @Column(name = "size", nullable = false)
     private Long size;

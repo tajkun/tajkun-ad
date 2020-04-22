@@ -17,7 +17,7 @@ import javax.persistence.*;
 @AllArgsConstructor
 @Entity
 @Table(name = "ad_unit_keyword")
-public class UnitKeywork {
+public class UnitKeyword {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,7 +30,7 @@ public class UnitKeywork {
     @Column(name = "keyword", nullable = false)
     private String keyword;
 
-    public UnitKeywork(Long unitId, String keyword) {
+    public UnitKeyword(Long unitId, String keyword) {
         this.unitId = unitId;
         this.keyword = keyword;
     }
