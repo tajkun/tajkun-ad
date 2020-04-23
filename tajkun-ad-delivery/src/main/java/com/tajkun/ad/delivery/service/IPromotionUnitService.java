@@ -18,7 +18,7 @@ public interface IPromotionUnitService {
 
     UnitInterestResponse createUnitInterest(UnitInterestRequest request) throws AdException;
 
-    UnitDistrictResponse creteUnitDistrict(UnitDistrictRequest request) throws AdException;
+    UnitDistrictResponse createUnitDistrict(UnitDistrictRequest request) throws AdException;
 
     // 推广单元与创意关联
     CreativeUnitResponse createCreativeUnit(CreativeUnitRequest request) throws AdException;
