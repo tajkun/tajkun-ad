@@ -17,12 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class UnitInterestRequest {
 
-    private List<UnitInterestVo> unitInterestVos;
+    private List<UnitInterestVO> unitInterestVos;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UnitInterestVo {
+    public static class UnitInterestVO {
 
         private Long unitId;
         private String interestTag;

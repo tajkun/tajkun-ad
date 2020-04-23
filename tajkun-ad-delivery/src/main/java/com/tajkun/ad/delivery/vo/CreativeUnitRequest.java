@@ -10,21 +10,21 @@ import java.util.List;
  * @program: tajkun-ad
  * @description:
  * @author: Jiakun
- * @create: 2020-04-23 11:02
+ * @create: 2020-04-23 13:23
  **/
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class UnitKeywordRequest {
+public class CreativeUnitRequest {
 
-    private List<UnitKeywordVO> unitKeywordVos;
+    private List<CreativeUnitItem> creativeUnitItems;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UnitKeywordVO {
+    public static class CreativeUnitItem {
 
+        private Long creativeId;
         private Long unitId;
-        private String keyword;
     }
 }

@@ -17,12 +17,12 @@ import java.util.List;
 @NoArgsConstructor
 public class UnitDistrictRequest {
 
-    private List<UnitDistrictVo> unitDistrictVos;
+    private List<UnitDistrictVO> unitDistrictVos;
 
     @Data
     @AllArgsConstructor
     @NoArgsConstructor
-    public static class UnitDistrictVo {
+    public static class UnitDistrictVO {
 
         private Long unitId;
         private String province;

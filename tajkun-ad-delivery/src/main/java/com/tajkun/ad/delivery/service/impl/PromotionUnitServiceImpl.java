@@ -4,11 +4,14 @@ import com.tajkun.ad.common.exception.AdException;
 import com.tajkun.ad.delivery.constant.Constants;
 import com.tajkun.ad.delivery.pojo.PromotionPlan;
 import com.tajkun.ad.delivery.pojo.PromotionUnit;
+import com.tajkun.ad.delivery.pojo.unit_dimension.CreativeUnit;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitDistrict;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitInterest;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitKeyword;
+import com.tajkun.ad.delivery.repository.CreativeRepository;
 import com.tajkun.ad.delivery.repository.PromotionPlanRepository;
 import com.tajkun.ad.delivery.repository.PromotionUnitRepository;
+import com.tajkun.ad.delivery.repository.unit_dimension.CreativeUnitRepository;
 import com.tajkun.ad.delivery.repository.unit_dimension.UnitDistrictRepository;
 import com.tajkun.ad.delivery.repository.unit_dimension.UnitInterestRepository;
 import com.tajkun.ad.delivery.repository.unit_dimension.UnitKeywordRepository;
@@ -31,20 +34,30 @@ import java.util.stream.Collectors;
 @Service
 public class PromotionUnitServiceImpl implements IPromotionUnitService {
 
-    @Autowired
-    private PromotionPlanRepository planRepository;
+    private final PromotionPlanRepository planRepository;
+
+    private final PromotionUnitRepository unitRepository;
+
+    private final UnitKeywordRepository unitKeywordRepository;
+
+    private final UnitDistrictRepository unitDistrictRepository;
+
+    private final UnitInterestRepository unitInterestRepository;
+
+    private final CreativeRepository creativeRepository;
+
+    private final CreativeUnitRepository creativeUnitRepository;
 
     @Autowired
-    private PromotionUnitRepository unitRepository;
-
-    @Autowired
-    private UnitKeywordRepository unitKeywordRepository;
-
-    @Autowired
-    private UnitDistrictRepository unitDistrictRepository;
-
-    @Autowired
-    private UnitInterestRepository unitInterestRepository;
+    public PromotionUnitServiceImpl(PromotionPlanRepository planRepository, PromotionUnitRepository unitRepository, UnitKeywordRepository unitKeywordRepository, UnitDistrictRepository unitDistrictRepository, UnitInterestRepository unitInterestRepository, CreativeRepository creativeRepository, CreativeUnitRepository creativeUnitRepository) {
+        this.planRepository = planRepository;
+        this.unitRepository = unitRepository;
+        this.unitKeywordRepository = unitKeywordRepository;
+        this.unitDistrictRepository = unitDistrictRepository;
+        this.unitInterestRepository = unitInterestRepository;
+        this.creativeRepository = creativeRepository;
+        this.creativeUnitRepository = creativeUnitRepository;
+    }
 
     @Override
     @Transactional
@@ -76,7 +89,7 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
     public UnitKeywordResponse createUnitKeyword(UnitKeywordRequest request) throws AdException {
         // 获取要创建的单元维度中的单元id
         List<Long> unitIds = request.getUnitKeywordVos().stream()
-                .map(UnitKeywordRequest.UnitKeywordVo::getUnitId)
+                .map(UnitKeywordRequest.UnitKeywordVO::getUnitId)
                 .collect(Collectors.toList());
         // 判断这些单元id是否存在
         if (!isRelatedUnitExist(unitIds)) {
@@ -104,7 +117,7 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
             throws AdException {
 
         List<Long> unitIds = request.getUnitInterestVos().stream()
-                .map(UnitInterestRequest.UnitInterestVo::getUnitId)
+                .map(UnitInterestRequest.UnitInterestVO::getUnitId)
                 .collect(Collectors.toList());
         if (!isRelatedUnitExist(unitIds)) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
@@ -127,7 +140,7 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
     public UnitDistrictResponse creteUnitDistrict(UnitDistrictRequest request) throws AdException {
 
         List<Long> unitIds = request.getUnitDistrictVos().stream()
-                .map(UnitDistrictRequest.UnitDistrictVo::getUnitId)
+                .map(UnitDistrictRequest.UnitDistrictVO::getUnitId)
                 .collect(Collectors.toList());
         if (!isRelatedUnitExist(unitIds)) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
@@ -145,6 +158,30 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
         return new UnitDistrictResponse(ids);
     }
 
+    @Override
+    public CreativeUnitResponse createCreativeUnit(CreativeUnitRequest request) throws AdException {
+
+        List<Long> unitIds = request.getCreativeUnitItems().stream()
+                .map(CreativeUnitRequest.CreativeUnitItem::getUnitId)
+                .collect(Collectors.toList());
+        List<Long> creativeIds = request.getCreativeUnitItems().stream()
+                .map(CreativeUnitRequest.CreativeUnitItem::getCreativeId)
+                .collect(Collectors.toList());
+        if (!(isRelatedUnitExist(unitIds) && isRelatedCreativeExist(creativeIds))) {
+            throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
+        }
+
+        List<CreativeUnit> creativeUnits = new ArrayList<>();
+        request.getCreativeUnitItems().forEach(creativeUnitItem -> creativeUnits.add(
+                new CreativeUnit(creativeUnitItem.getCreativeId(), creativeUnitItem.getUnitId())
+        ));
+        List<Long> ids = creativeUnitRepository.saveAll(creativeUnits).stream()
+                .map(CreativeUnit::getId)
+                .collect(Collectors.toList());
+        
+        return new CreativeUnitResponse(ids);
+    }
+
 
     // 推广单元限制维度统一验证方法
     private boolean isRelatedUnitExist(List<Long> unitIds) {
@@ -153,6 +190,13 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
         }
         // 是否有重复
         return unitRepository.findAllById(unitIds).size() == new HashSet<>(unitIds).size();
+    }
+
+    private boolean isRelatedCreativeExist(List<Long> creativeIds) {
+        if (CollectionUtils.isEmpty(creativeIds)) {
+            return false;
+        }
+        return creativeRepository.findAllById(creativeIds).size() == new HashSet<>(creativeIds).size();
     }
 
 }
