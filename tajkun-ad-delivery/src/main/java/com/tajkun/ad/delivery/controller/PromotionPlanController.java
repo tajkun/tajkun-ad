@@ -57,4 +57,11 @@ public class PromotionPlanController {
         promotionPlanService.deleteAdPlan(request);
     }
 
+    // 测试
+    @PostMapping("/delete/promotionPlan1")
+    public void deletePlan1(@RequestBody PromotionPlanRequest request) throws AdException {
+        log.info("tajkun-ad-delivery: deletePlan -> {}", JSON.toJSONString(request));
+        promotionPlanService.deleteAdPlan(request);
+    }
+
 }
