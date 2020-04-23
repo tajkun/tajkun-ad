@@ -35,7 +35,7 @@ public class UserServiceImpl implements IUserService {
 
         User oldUser = userRepository.findByUsername(request.getUsername());
         if (oldUser != null) {
-            throw new AdException(Constants.ErrorMsg.SAME_NAME_ERROR);
+            throw new AdException(Constants.ErrorMsg.SAME_NAME_USER_ERROR);
         }
 
         User newUser = userRepository.save(new User(

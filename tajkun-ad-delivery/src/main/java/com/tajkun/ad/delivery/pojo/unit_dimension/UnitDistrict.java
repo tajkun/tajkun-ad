@@ -8,7 +8,7 @@ import javax.persistence.*;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: todo: 地域字典
  * @author: Jiakun
  * @create: 2020-04-22 11:46
  **/

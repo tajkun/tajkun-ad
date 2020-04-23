@@ -13,6 +13,7 @@ import com.tajkun.ad.delivery.vo.PromotionPlanGetRequest;
 import com.tajkun.ad.delivery.vo.PromotionPlanRequest;
 import com.tajkun.ad.delivery.vo.PromotionPlanResponse;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
@@ -25,6 +26,7 @@ import java.util.Optional;
  * @author: Jiakun
  * @create: 2020-04-22 21:55
  **/
+@Service
 public class PromotionPlanServiceImpl implements IPromotionPlanService {
 
     @Autowired
