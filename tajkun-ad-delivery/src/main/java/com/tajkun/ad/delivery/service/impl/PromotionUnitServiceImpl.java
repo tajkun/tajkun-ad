@@ -178,7 +178,7 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
         List<Long> ids = creativeUnitRepository.saveAll(creativeUnits).stream()
                 .map(CreativeUnit::getId)
                 .collect(Collectors.toList());
-        
+
         return new CreativeUnitResponse(ids);
     }
 

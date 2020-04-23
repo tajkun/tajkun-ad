@@ -1,7 +1,7 @@
 server:
   port: 7000
   servlet:
-    context-path: /tajkun-ad-delivery   # 相当于请求controller的前缀
+    context-path: /delivery   # 相当于请求controller的前缀
 
 spring:
   application:
