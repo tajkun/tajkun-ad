@@ -1,29 +1,29 @@
 package com.tajkun.ad;
 
-import com.tajkun.ad.delivery.pojo.Creative;
-import com.tajkun.ad.delivery.pojo.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
-import org.springframework.cloud.client.discovery.EnableDiscoveryClient;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
+import org.springframework.cloud.netflix.hystrix.EnableHystrix;
+import org.springframework.cloud.netflix.hystrix.dashboard.EnableHystrixDashboard;
 import org.springframework.cloud.openfeign.EnableFeignClients;
-import org.springframework.context.annotation.Bean;
-import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 /**
  * @program: tajkun-ad
  * @description:
  * @author: Jiakun
- * @create: 2020-04-22 09:35
+ * @create: 2020-04-24 15:42
  **/
-@EnableFeignClients  // 目前仅用于监控
-@EnableCircuitBreaker  // 用于监控
+//@EnableDiscoveryClient
+@EnableHystrixDashboard
+@EnableHystrix
+@EnableCircuitBreaker
 @EnableEurekaClient
+@EnableFeignClients
 @SpringBootApplication
-public class AdDeliveryApplication {
-    public static void main(String[] args) {
-        SpringApplication.run(AdDeliveryApplication.class, args);
-    }
+public class AdSearchApplication {
 
+    public static void main(String[] args) {
+        SpringApplication.run(AdSearchApplication.class, args);
+    }
 }
