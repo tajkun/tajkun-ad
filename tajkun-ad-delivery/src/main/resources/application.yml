@@ -14,7 +14,7 @@ spring:
       hibernate.format_sql: true
     open-in-view: false  # 懒加载时要设置为false
   datasource:
-    url: jdbc:mysql://127.0.0.1:3306/tajkun_ad?autoReconnect=true
+    url: jdbc:mysql://127.0.0.1:3306/tajkun_ad?autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
     username: root
     password: root
     tomcat:

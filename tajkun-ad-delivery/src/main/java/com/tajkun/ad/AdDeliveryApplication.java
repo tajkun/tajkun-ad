@@ -1,10 +1,14 @@
 package com.tajkun.ad;
 
+import com.tajkun.ad.delivery.pojo.Creative;
+import com.tajkun.ad.delivery.pojo.Person;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 import org.springframework.cloud.client.circuitbreaker.EnableCircuitBreaker;
 import org.springframework.cloud.netflix.eureka.EnableEurekaClient;
 import org.springframework.cloud.openfeign.EnableFeignClients;
+import org.springframework.context.annotation.Bean;
+import org.springframework.orm.hibernate5.LocalSessionFactoryBean;
 
 /**
  * @program: tajkun-ad
@@ -20,4 +24,5 @@ public class AdDeliveryApplication {
     public static void main(String[] args) {
         SpringApplication.run(AdDeliveryApplication.class, args);
     }
+
 }

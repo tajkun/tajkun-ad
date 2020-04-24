@@ -28,10 +28,10 @@ public class CreativeUnit {
     private Long creativeId;
 
     @Column(name = "unit_id", nullable = false)
-    private Long nuitId;
+    private Long unitId;
 
-    public CreativeUnit(Long creativeId, Long nuitId) {
+    public CreativeUnit(Long creativeId, Long unitId) {
         this.creativeId = creativeId;
-        this.nuitId = nuitId;
+        this.unitId = unitId;
     }
 }

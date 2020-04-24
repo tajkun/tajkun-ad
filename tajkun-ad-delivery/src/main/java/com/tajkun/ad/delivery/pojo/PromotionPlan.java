@@ -57,4 +57,6 @@ public class PromotionPlan {
         this.createTime = new Date();
         this.updateTime = this.createTime;
     }
+
+
 }

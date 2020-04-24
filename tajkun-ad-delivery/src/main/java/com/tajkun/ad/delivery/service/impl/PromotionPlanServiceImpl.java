@@ -29,11 +29,15 @@ import java.util.Optional;
 @Service
 public class PromotionPlanServiceImpl implements IPromotionPlanService {
 
-    @Autowired
-    private UserRepository userRepository;
+    private final UserRepository userRepository;
+
+    private final PromotionPlanRepository promotionPlanRepository;
 
     @Autowired
-    private PromotionPlanRepository promotionPlanRepository;
+    public PromotionPlanServiceImpl(UserRepository userRepository, PromotionPlanRepository promotionPlanRepository) {
+        this.userRepository = userRepository;
+        this.promotionPlanRepository = promotionPlanRepository;
+    }
 
     @Override
     @Transactional

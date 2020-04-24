@@ -23,8 +23,12 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements IUserService {
 
+    private final UserRepository userRepository;
+
     @Autowired
-    private UserRepository userRepository;
+    public UserServiceImpl(UserRepository userRepository) {
+        this.userRepository = userRepository;
+    }
 
     @Override
     @Transactional
@@ -45,4 +49,6 @@ public class UserServiceImpl implements IUserService {
         return new CreateUserResponse(newUser.getId(), newUser.getUsername(), newUser.getToken(),
                 newUser.getCreateTime(), newUser.getUpdateTime());
     }
+
+
 }

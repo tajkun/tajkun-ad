@@ -136,8 +136,9 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
         return new UnitInterestResponse(ids);
     }
 
+
     @Override
-    public UnitDistrictResponse creteUnitDistrict(UnitDistrictRequest request) throws AdException {
+    public UnitDistrictResponse createUnitDistrict(UnitDistrictRequest request) throws AdException {
 
         List<Long> unitIds = request.getUnitDistrictVos().stream()
                 .map(UnitDistrictRequest.UnitDistrictVO::getUnitId)
