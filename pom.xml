@@ -62,6 +62,12 @@
             <version>1.1.1</version>
         </dependency>
         <!-- jaxb模块引用 - end -->
+        <!-- JDK11 需要加上这个依赖 -->
+        <!--<dependency>
+            <groupId>org.javassist</groupId>
+            <artifactId>javassist</artifactId>
+            <version>3.25.0-GA</version>
+        </dependency> -->
     </dependencies>
 
     <dependencyManagement>
