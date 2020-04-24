@@ -7,3 +7,10 @@ eureka:
   client:
     service-url:
       defaultZone: http://server1:8000/eureka/
+zuul:
+  prefix: /api
+  routes:
+    delivery:
+      path: /delivery/**
+      serviceId: tajkun-ad-delivery
+      strip-prefix: false
