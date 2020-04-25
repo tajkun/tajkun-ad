@@ -1,4 +1,4 @@
-package com.tajkun.ad.search.index.createunit;
+package com.tajkun.ad.search.index.creativeunit;
 
 import lombok.AllArgsConstructor;
 import lombok.Data;
@@ -13,7 +13,7 @@ import lombok.NoArgsConstructor;
 @Data
 @AllArgsConstructor
 @NoArgsConstructor
-public class CreateUnitObject {
+public class CreativeUnitObject {
 
     private Long creativeId;
     private Long unitId;

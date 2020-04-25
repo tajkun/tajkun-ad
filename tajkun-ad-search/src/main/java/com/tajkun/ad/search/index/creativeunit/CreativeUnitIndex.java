@@ -1,4 +1,4 @@
-package com.tajkun.ad.search.index.createunit;
+package com.tajkun.ad.search.index.creativeunit;
 
 import com.tajkun.ad.search.index.IndexAware;
 import lombok.extern.slf4j.Slf4j;
@@ -18,10 +18,10 @@ import java.util.concurrent.ConcurrentSkipListSet;
  **/
 @Slf4j
 @Component
-public class CreativeUnitIndex implements IndexAware<String, CreateUnitObject> {
+public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject> {
 
     // <creativeId-unitId, CreativeObject>
-    private static Map<String, CreateUnitObject> objectMap;
+    private static Map<String, CreativeUnitObject> objectMap;
     // <createId, unitIds>
     private static Map<Long, Set<Long>> creativeUnitMap;
     // <unitId, creativeIds>
@@ -34,12 +34,12 @@ public class CreativeUnitIndex implements IndexAware<String, CreateUnitObject> {
     }
 
     @Override
-    public CreateUnitObject get(String key) {
+    public CreativeUnitObject get(String key) {
         return objectMap.get(key);
     }
 
     @Override
-    public void add(String key, CreateUnitObject value) {
+    public void add(String key, CreativeUnitObject value) {
         log.info("before add: {}", objectMap);
         objectMap.put(key, value);
 
@@ -60,12 +60,12 @@ public class CreativeUnitIndex implements IndexAware<String, CreateUnitObject> {
     }
 
     @Override
-    public void update(String key, CreateUnitObject value) {
+    public void update(String key, CreativeUnitObject value) {
         log.error("CreativeUnit index can not support update");
     }
 
     @Override
-    public void delete(String key, CreateUnitObject value) {
+    public void delete(String key, CreativeUnitObject value) {
         log.info("before delete: {}", objectMap);
         objectMap.remove(key);
 
