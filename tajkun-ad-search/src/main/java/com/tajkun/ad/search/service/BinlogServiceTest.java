@@ -24,12 +24,15 @@ public class BinlogServiceTest {
             if (data instanceof UpdateRowsEventData) {
                 System.out.println("update-------------");
                 System.out.println(data.toString());
+                System.out.println(event.getHeader().getEventType());
             } else if (data instanceof WriteRowsEventData){
                 System.out.println("write-------------");
                 System.out.println(data.toString());
+                System.out.println(event.getHeader().getEventType());
             } else if (data instanceof DeleteRowsEventData){
                 System.out.println("delete-------------");
                 System.out.println(data.toString());
+                System.out.println(event.getHeader().getEventType());
             }
         });
 
