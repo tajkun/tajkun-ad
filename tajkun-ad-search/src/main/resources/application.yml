@@ -35,3 +35,12 @@ management:
     web:
       exposure:
         include: "*"  # 暴露全部监控信息
+
+adconfig:
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: root
+    binlogName: ""  # binlog文件名
+    position: -1    # -1表示从当前位置开始
