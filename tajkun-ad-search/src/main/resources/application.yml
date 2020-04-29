@@ -44,3 +44,6 @@ adconfig:
     password: root
     binlogName: ""  # binlog文件名
     position: -1    # -1表示从当前位置开始
+
+  kafka:
+    topic: ad-search-mysql-data
