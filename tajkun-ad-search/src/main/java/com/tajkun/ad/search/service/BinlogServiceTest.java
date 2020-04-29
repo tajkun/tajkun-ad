@@ -15,6 +15,12 @@ import java.io.IOException;
  * @create: 2020-04-26 22:06
  **/
 public class BinlogServiceTest {
+
+//    UpdateRowsEventData{tableId=111, includedColumnsBeforeUpdate={0, 1, 2, 3, 4, 5}, includedColumns={0, 1, 2, 3, 4, 5}, rows=[
+//    {before=[1, jk, , 0, Thu Jan 01 08:00:00 CST 1970, Thu Jan 01 08:00:00 CST 1970], after=[2, jk, , 0, Thu Jan 01 08:00:00 CST 1970, Thu Jan 01 08:00:00 CST 1970]}
+//]}
+//    Thu Jan 01 08:00:00 CST 1970
+
     public static void main(String[] args) throws IOException {
 
         BinaryLogClient client = new BinaryLogClient("127.0.0.1", 3306,
