@@ -3,9 +3,10 @@ package com.tajkun.ad.search.index.unit;
 import com.tajkun.ad.search.index.IndexAware;
 import com.tajkun.ad.search.index.plan.PlanObject;
 import lombok.extern.slf4j.Slf4j;
+import org.apache.commons.collections4.CollectionUtils;
 import org.springframework.stereotype.Component;
 
-import java.util.Map;
+import java.util.*;
 import java.util.concurrent.ConcurrentHashMap;
 
 /**
@@ -24,6 +25,33 @@ public class UnitIndex implements IndexAware<Long, UnitObject> {
     static {
         // 线程安全
         objectMap = new ConcurrentHashMap<>();
+    }
+
+    // 查看推广单元中是否有positionType匹配的
+    public Set<Long> match(Integer positionType) {
+        Set<Long> adUnitIds = new HashSet<>();
+        objectMap.forEach((k, v) -> {
+            if (UnitObject.isAdSlotTypeOK(positionType, v.getPositionType())) {
+                adUnitIds.add(k);
+            }
+        });
+        return adUnitIds;
+    }
+
+    public List<UnitObject> fetch(Collection<Long> adUnitIds) {
+        if (CollectionUtils.isEmpty(adUnitIds)) {
+            return Collections.emptyList();
+        }
+        List<UnitObject> result = new ArrayList<>();
+        adUnitIds.forEach(u -> {
+            UnitObject object = get(u);
+            if (object == null) {
+                log.error("UnitObject not found: {}", u);
+                return;
+            }
+            result.add(object);
+        });
+        return result;
     }
 
     @Override
