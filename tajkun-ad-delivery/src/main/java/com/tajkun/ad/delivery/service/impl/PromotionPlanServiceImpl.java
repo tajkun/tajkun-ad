@@ -113,7 +113,7 @@ public class PromotionPlanServiceImpl implements IPromotionPlanService {
 
     @Override
     @Transactional
-    public void deleteAdPlan(PromotionPlanRequest request) throws AdException {
+    public void deletePromotionPlan(PromotionPlanRequest request) throws AdException {
 
         if (!request.deleteValidate()) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);

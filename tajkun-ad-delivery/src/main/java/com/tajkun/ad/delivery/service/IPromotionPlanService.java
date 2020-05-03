@@ -26,5 +26,5 @@ public interface IPromotionPlanService {
     PromotionPlanResponse updatePromotionPlan(PromotionPlanRequest request) throws AdException;
 
     // 删除推广计划
-    void deleteAdPlan(PromotionPlanRequest request) throws AdException;
+    void deletePromotionPlan(PromotionPlanRequest request) throws AdException;
 }

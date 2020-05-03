@@ -1,0 +1,51 @@
+server:
+  port: 7001
+  servlet:
+    context-path: /search   # 相当于请求controller的前缀
+
+spring:
+  application:
+    name: tajkun-ad-search
+  jpa:
+    show-sql: true  # 打印sql语句
+    hibernate:
+      ddl-auto: none
+    properties:
+      hibernate.format_sql: true
+    open-in-view: false  # 懒加载时要设置为false
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tajkun_ad?autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    tomcat:
+      max-active: 4  # 数据库连接池最大连接数
+      min-idle: 2    # 最小连接数
+      initial-size: 2 #默认连接数
+eureka:
+  client:
+    service-url:
+      defaultZone: http://server1:8000/eureka/
+    enabled: false
+
+feign:
+  hystrix:
+    enabled: true
+
+management:
+  endpoints:
+    web:
+      exposure:
+        include: "*"  # 暴露全部监控信息
+
+# 类属性配置
+adconfig:
+  mysql:
+    host: 127.0.0.1
+    port: 3306
+    username: root
+    password: root
+    binlogName: ""  # binlog文件名
+    position: -1    # -1表示从当前位置开始
+
+  kafka:
+    topic: ad-search-mysql-data

@@ -1,0 +1,50 @@
+{
+  "featureInfo": {
+    "districtFeature": {
+      "districts": [{
+        "city": "合肥市",
+        "province": "安徽省"
+      }]
+    },
+    "featureRelation": "OR",
+    "interestFeature": {
+      "interests": ["台球", "游泳"]
+    },
+    "keywordFeature": {
+      "keywords": ["宝马", "大众"]
+    }
+  },
+  "mediaId": "tajkun-ad",
+  "requestInfo": {
+    "adSlots": [{
+      "adSlotCode": "ad-x",
+      "height": 720,
+      "minCpm": 1000,
+      "positionType": 1,
+      "type": [1, 2],
+      "width": 1080
+    }],
+    "app": {
+      "activityName": "tajkun22",
+      "appCode": "tajkun",
+      "appName": "tajkun00",
+      "packageName": "tajkun11"
+    },
+    "device": {
+      "deviceCode": "iphone",
+      "displaySize": "1080 720",
+      "ip": "127.0.0.1",
+      "mac": "xxxx",
+      "model": "x",
+      "screenSize": "1080 720",
+      "serialName": "12345"
+    },
+    "geo": {
+      "city": "济南市",
+      "latitude": 98.23,
+      "longitude": 25.33,
+      "province": "济南市"
+    },
+    "requestId": "aaa"
+  }
+}
