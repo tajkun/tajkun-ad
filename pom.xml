@@ -15,6 +15,7 @@
         <module>tajkun-ad-common</module>
         <module>tajkun-ad-delivery</module>
         <module>tajkun-ad-search</module>
+        <module>tajkun-ad-dashboard</module>
     </modules>
 
     <name>tajkun-ad</name>

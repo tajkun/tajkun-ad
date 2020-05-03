@@ -1,6 +1,7 @@
 package com.tajkun.ad.search.retrieve.impl;
 
 import com.alibaba.fastjson.JSON;
+import com.netflix.hystrix.contrib.javanica.annotation.HystrixCommand;
 import com.tajkun.ad.search.index.CommonStatus;
 import com.tajkun.ad.search.index.DataTable;
 import com.tajkun.ad.search.index.creative.CreativeIndex;
@@ -35,9 +36,13 @@ import java.util.*;
 @Service
 public class SearchImpl implements ISearch {
 
-    @Override
-    public SearchResponse fetchAds(SearchRequest request) {
+    public SearchResponse fallback(SearchRequest request, Throwable e) {
+        return null;
+    }
 
+    @Override
+    @HystrixCommand(fallbackMethod = "fallback")
+    public SearchResponse fetchAds(SearchRequest request) {
         // 请求的广告位信息
         List<AdSlot> adSlots = request.getRequestInfo().getAdSlots();
         // 获取features

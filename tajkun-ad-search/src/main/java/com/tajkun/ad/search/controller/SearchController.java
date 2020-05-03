@@ -6,8 +6,12 @@ import com.tajkun.ad.common.vo.CommonResponse;
 import com.tajkun.ad.search.client.DeliveryClient;
 import com.tajkun.ad.search.client.vo.PromotionPlan;
 import com.tajkun.ad.search.client.vo.PromotionPlanRequest;
+import com.tajkun.ad.search.retrieve.ISearch;
+import com.tajkun.ad.search.retrieve.vo.SearchRequest;
+import com.tajkun.ad.search.retrieve.vo.SearchResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
@@ -25,14 +29,16 @@ import java.util.List;
 @RestController
 public class SearchController {
 
+    private final ISearch search;
     private final RestTemplate restTemplate;
-
     private final DeliveryClient deliveryClient;
 
+
     @Autowired
-    public SearchController(RestTemplate restTemplate, DeliveryClient deliveryClient) {
+    public SearchController(RestTemplate restTemplate, DeliveryClient deliveryClient, ISearch search) {
         this.restTemplate = restTemplate;
         this.deliveryClient = deliveryClient;
+        this.search = search;
     }
 
     @SuppressWarnings("all")
@@ -51,4 +57,11 @@ public class SearchController {
         log.info("tajkun-ad-search: getPlan -> {}", JSON.toJSONString(request));
         return deliveryClient.getPlan(request);
     }
+
+    @PostMapping("/fetchAds")
+    public SearchResponse fetchAds(@RequestBody SearchRequest request) {
+        log.info("tajkun-ad-aearch: fetchAds -> {}", JSON.toJSONString(request));
+        return search.fetchAds(request);
+    }
+
 }

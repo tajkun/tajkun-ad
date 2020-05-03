@@ -13,4 +13,8 @@ zuul:
     delivery:
       path: /delivery/**
       serviceId: tajkun-ad-delivery
+      strip-prefix: false  # 不过滤前缀delivery
+    search:
+      path: /search/**
+      serviceId: tajkun-ad-search
       strip-prefix: false

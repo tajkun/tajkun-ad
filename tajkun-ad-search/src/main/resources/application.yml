@@ -36,6 +36,7 @@ management:
       exposure:
         include: "*"  # 暴露全部监控信息
 
+# 类属性配置
 adconfig:
   mysql:
     host: 127.0.0.1

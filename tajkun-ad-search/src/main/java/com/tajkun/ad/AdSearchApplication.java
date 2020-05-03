@@ -20,6 +20,8 @@ import org.springframework.web.client.RestTemplate;
 //@EnableDiscoveryClient
 @EnableHystrixDashboard
 @EnableHystrix
+// 此注解会通过aop拦截所有加了@HystrixCommand注解的方法，将这些方法放入Hystrix自己的线程池中(效率低)，
+// 方法失败时通过反射(效率低)去调用回退方法
 @EnableCircuitBreaker
 @EnableEurekaClient
 @EnableFeignClients
