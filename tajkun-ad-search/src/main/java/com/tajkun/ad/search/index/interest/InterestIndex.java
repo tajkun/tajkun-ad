@@ -40,7 +40,7 @@ public class InterestIndex implements IndexAware<String, Set<Long>> {
 
     @Override
     public void add(String key, Set<Long> value) {
-        log.info("before add: {}", unitInterestMap);
+        log.info("InterestIndex before add: {}", unitInterestMap);
         Set<Long> unitIds = CommonUtils.getorCreate(
                 key,
                 interestUnitMap,
@@ -56,7 +56,7 @@ public class InterestIndex implements IndexAware<String, Set<Long>> {
             );
             interestTags.add(key);
         }
-        log.info("after add: {}", unitInterestMap);
+        log.info("InterestIndex after add: {}", unitInterestMap);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class InterestIndex implements IndexAware<String, Set<Long>> {
 
     @Override
     public void delete(String key, Set<Long> value) {
-        log.info("before delete: {}", unitInterestMap);
+        log.info("InterestIndex before delete: {}", unitInterestMap);
         // 避免全部删除
         Set<Long> unitIds = CommonUtils.getorCreate(
                 key,
@@ -82,7 +82,7 @@ public class InterestIndex implements IndexAware<String, Set<Long>> {
                     ConcurrentSkipListSet::new);
             interestTags.remove(key);
         }
-        log.info("after delete: {}", unitInterestMap);
+        log.info("InterestIndex after delete: {}", unitInterestMap);
     }
 
     public boolean match(Long unitId, List<String> interestTags) {

@@ -17,7 +17,7 @@ import java.util.Map;
 
 /**
  * @program: tajkun-ad
- * @description: 各层级增量数据投递：MysqlRowData -> ***table
+ * @description: 各层级增量数据投递：MysqlRowData -> ***table -> levelHandler
  * @author: Jiakun
  * @create: 2020-04-29 11:33
  **/
@@ -41,10 +41,10 @@ public class IndexSender implements ISender {
 
     // 第二层级增量数据投递
     private void level2RowData(MySqlRowData rowData) {
+
         if (rowData.getTableName().equals(Constant.AD_PLAN_TABLE_INFO.TABLE_NAME)) {
-            
             List<PlanTable> planTables = new ArrayList<>();
-            
+
             for (Map<String, String> fieldValueMap : rowData.getFieldValueMap()) {
                 PlanTable planTable = new PlanTable();
                 fieldValueMap.forEach((k, v) -> {
@@ -69,6 +69,7 @@ public class IndexSender implements ISender {
                 planTables.add(planTable);
             }
             planTables.forEach(p -> LevelDataHandler.handleLevel2(p, rowData.getOpType()));
+
         } else if (rowData.getTableName().equals(Constant.AD_CREATIVE_TABLE_INFO.TABLE_NAME)) {
                
                 List<CreativeTable> creativeTables = new ArrayList<>();
@@ -108,8 +109,8 @@ public class IndexSender implements ISender {
 
     // 第三层级增量数据投递
     private void level3RowData(MySqlRowData rowData) {
+
         if (rowData.getTableName().equals(Constant.AD_UNIT_TABLE_INFO.TABLE_NAME)) {
-          
             List<UnitTable> unitTables = new ArrayList<>();
 
             for (Map<String, String> fieldValMap : rowData.getFieldValueMap()) {
@@ -133,6 +134,7 @@ public class IndexSender implements ISender {
                 unitTables.add(unitTable);
             }
             unitTables.forEach(u -> LevelDataHandler.handleLevel3(u, rowData.getOpType()));
+
         } else if (rowData.getTableName().equals(Constant.AD_CREATIVE_UNIT_TABLE_INFO.TABLE_NAME)) {
                 
             List<CreativeUnitTable> creativeUnitTables = new ArrayList<>();
@@ -157,11 +159,11 @@ public class IndexSender implements ISender {
 
     // 第四层级增量数据
     private void level4RowData(MySqlRowData rowData) {
+
         switch (rowData.getTableName()) {
             case Constant.AD_UNIT_DISTRICT_TABLE_INFO.TABLE_NAME:
 
                 List<UnitDistrictTable> districtTables = new ArrayList<>();
-
                 for (Map<String, String> fieldValMap : rowData.getFieldValueMap()) {
                     UnitDistrictTable districtTable = new UnitDistrictTable();
                     fieldValMap.forEach((k, v) -> {
@@ -181,10 +183,10 @@ public class IndexSender implements ISender {
                 }
                 districtTables.forEach(d -> LevelDataHandler.handleLevel4(d, rowData.getOpType()));
                 break;
+
             case Constant.AD_UNIT_IT_TABLE_INFO.TABLE_NAME:
 
                 List<UnitInterestTable> interestTables = new ArrayList<>();
-
                 for (Map<String, String> fieldValMap : rowData.getFieldValueMap()) {
                     UnitInterestTable interestTable = new UnitInterestTable();
                     fieldValMap.forEach((k, v) -> {
@@ -201,10 +203,10 @@ public class IndexSender implements ISender {
                 }
                 interestTables.forEach(i -> LevelDataHandler.handleLevel4(i, rowData.getOpType()));
                 break;
+
             case Constant.AD_UNIT_KEYWORD_TABLE_INFO.TABLE_NAME:
                 
                 List<UnitKeywordTable> keywordTables = new ArrayList<>();
-
                 for (Map<String, String> fieldValMap : rowData.getFieldValueMap()) {
                     UnitKeywordTable keywordTable = new UnitKeywordTable();
                     fieldValMap.forEach((k, v) -> {

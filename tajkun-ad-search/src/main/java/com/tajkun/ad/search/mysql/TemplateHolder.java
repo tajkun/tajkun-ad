@@ -39,6 +39,7 @@ public class TemplateHolder {
         this.jdbcTemplate = jdbcTemplate;
     }
 
+    // TemplateHolder被容器加载时，解析立马执行
     @PostConstruct
     private void init() {
         loadJson("template.json");
@@ -49,6 +50,7 @@ public class TemplateHolder {
         return template.getTableTemplateMap().get(tableName);
     }
 
+    // 加载json模板文件
     private void loadJson(String path) {
         // 获取resources下面的文件
         ClassLoader classLoader = Thread.currentThread().getContextClassLoader();
@@ -67,11 +69,17 @@ public class TemplateHolder {
 
     // 索引到列的映射
     private void loadMeta() {
+
         for (Map.Entry<String, TableTemplate> entry : template.getTableTemplateMap().entrySet()) {
+
             TableTemplate table = entry.getValue();
             List<String> updateFields = table.getOpTypeFieldSetMap().get(OpType.UPDATE);
+//            System.out.println("tableName: "+table.getTableName()+" updateFields: "+updateFields);
             List<String> insertFields = table.getOpTypeFieldSetMap().get(OpType.ADD);
             List<String> deleteFields = table.getOpTypeFieldSetMap().get(OpType.DELETE);
+//            System.out.println("tableName: "+table.getTableName()+" deleteFields: "+deleteFields);
+
+            System.out.println("dbName: "+template.getDatabase()+" tableName: "+table.getTableName());
             jdbcTemplate.query(SQL_SCHEMA, new Object[]{template.getDatabase(), table.getTableName()},
                     (resultSet, i) -> {
                         int pos = resultSet.getInt("ORDINAL_POSITION");
@@ -85,6 +93,5 @@ public class TemplateHolder {
                     });
         }
     }
-
 
 }

@@ -42,27 +42,32 @@ public class IncrementListener implements IListener{
     @PostConstruct
     public void register() {
         log.info("IncrementListener register db and table info");
+        // 把所有的表都注册上同一个监听处理器
         Constant.table2Db.forEach((k, v) -> aggregationListener.register(v, k, this));
     }
 
     // 将binlogrowdata转为mysqlrowdata并投递
     @Override
     public void onEvent(BinlogRowData eventData) {
+
         TableTemplate tableTemplate = eventData.getTableTemplate();
         EventType eventType = eventData.getEventType();
         // 包装成最后需要投递的数据
         MySqlRowData rowData = new MySqlRowData();
         rowData.setTableName(tableTemplate.getTableName());
+        // todo:
         rowData.setLevel(tableTemplate.getLevel());
         OpType opType = OpType.toOpType(eventType);
         rowData.setOpType(opType);
         // 取出模板中该操作对应的字段列表
         List<String> fieldList = tableTemplate.getOpTypeFieldSetMap().get(opType);
+        System.out.println("fieldList: "+fieldList);
         if (null == fieldList) {
             log.warn("{} not support for {}", opType, tableTemplate.getTableName());
             return;
         }
         // 发生变化的列以及列值
+        System.out.println("eventData.getAfterData(): "+eventData.getAfterData());
         for (Map<String, String> afterMap : eventData.getAfterData()) {
             Map<String, String> _afterMap = new HashMap<>();
             for (Map.Entry<String, String> entry : afterMap.entrySet()) {
@@ -72,6 +77,8 @@ public class IncrementListener implements IListener{
             }
             rowData.getFieldValueMap().add(_afterMap);
         }
+        System.out.println(rowData);
         sender.sender(rowData);
     }
+
 }

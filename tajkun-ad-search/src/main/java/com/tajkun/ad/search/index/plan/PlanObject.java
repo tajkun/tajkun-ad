@@ -15,7 +15,6 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-// 索引对象
 public class PlanObject {
 
     private Long planId;
@@ -24,6 +23,7 @@ public class PlanObject {
     private Date startDate;
     private Date endDate;
 
+    // 更新索引时 可能并不是更新所有字段
     public void update(PlanObject newObject) {
         if (null != newObject.getPlanId()) {
             this.planId = newObject.getPlanId();

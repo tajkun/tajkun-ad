@@ -8,7 +8,7 @@ import java.util.Map;
 
 /**
  * @program: tajkun-ad
- * @description: 将binlog数据（第三方工具传来的event）转化为定义的此对象
+ * @description: 将binlog数据（第三方工具传来的event）转化为此java对象
  * @author: Jiakun
  * @create: 2020-04-28 16:08
  **/

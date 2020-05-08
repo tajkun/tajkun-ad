@@ -40,7 +40,7 @@ public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject>
 
     @Override
     public void add(String key, CreativeUnitObject value) {
-        log.info("before add: {}", objectMap);
+        log.info("CreativeUnitIndex before add: {}", objectMap);
         objectMap.put(key, value);
 
         Set<Long> unitIds = creativeUnitMap.get(value.getCreativeId());
@@ -56,7 +56,7 @@ public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject>
             unitCreativeMap.put(value.getUnitId(), creativeIds);
         }
         creativeIds.add(value.getCreativeId());
-        log.info("after add: {}", objectMap);
+        log.info("CreativeUnitIndex after add: {}", objectMap);
     }
 
     @Override
@@ -66,7 +66,7 @@ public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject>
 
     @Override
     public void delete(String key, CreativeUnitObject value) {
-        log.info("before delete: {}", objectMap);
+        log.info("CreativeUnitIndex before delete: {}", objectMap);
         objectMap.remove(key);
 
         Set<Long> unitIds = creativeUnitMap.get(value.getCreativeId());
@@ -78,7 +78,7 @@ public class CreativeUnitIndex implements IndexAware<String, CreativeUnitObject>
         if (CollectionUtils.isNotEmpty(creativeIds)) {
             creativeIds.remove(value.getCreativeId());
         }
-        log.info("after delete: {}", objectMap);
+        log.info("CreativeUnitIndex after delete: {}", objectMap);
     }
 
     // 挑选出符合的创意

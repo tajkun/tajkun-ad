@@ -1,5 +1,5 @@
 {
-  "database": "imooc_ad_data",
+  "database": "tajkun_ad",
   "tableList": [
     {
       "tableName": "ad_plan",
@@ -189,7 +189,7 @@
       ]
     },
     {
-      "tableName": "ad_unit_it",
+      "tableName": "ad_unit_interest",
       "level": 4,
       "insert": [
         {

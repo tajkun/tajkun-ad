@@ -8,7 +8,7 @@ import java.util.List;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: json模板文件中table的java对象表示
  * @author: Jiakun
  * @create: 2020-04-26 22:46
  **/

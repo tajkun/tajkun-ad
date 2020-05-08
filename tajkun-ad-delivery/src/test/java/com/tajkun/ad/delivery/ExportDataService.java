@@ -62,7 +62,7 @@ public class ExportDataService {
 
     @Test
     public void exportTableData() {
-        log.error("开始---------");
+        log.error("导出数据到文件 开始---------");
         exportPlanTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.PROMOTION_PLAN));
         exportUnitTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.PROMOTION_UNIT));
         exportCreativeTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.CREATIVE));
@@ -70,11 +70,10 @@ public class ExportDataService {
         exportUnitKeywordTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.UNIT_KEYWORD));
         exportUnitInterestTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.UNIT_INTEREST));
         exportUnitDistrictTable(String.format("%s%s", ExportConstant.DATA_ROOT_DIR, ExportConstant.UNIT_DISTRICT));
-        log.error("结束--------");
+        log.error("导出数据到文件 结束--------");
     }
 
     public void exportPlanTable(String fileName) {
-
 
         List<PromotionPlan> plans = planRepository.findAllByPlanStatus(CommonStatus.VALID.getStatusCode());
         if (CollectionUtils.isEmpty(plans)) {

@@ -41,7 +41,7 @@ public class DistrictIndex implements IndexAware<String, Set<Long>> {
 
     @Override
     public void add(String key, Set<Long> value) {
-        log.info("before add: {}", unitDistrictMap);
+        log.info("DistrictIndex before add: {}", unitDistrictMap);
         Set<Long> unitIds = CommonUtils.getorCreate(
                 key,
                 districtUnitMap,
@@ -57,7 +57,7 @@ public class DistrictIndex implements IndexAware<String, Set<Long>> {
             );
             districts.add(key);
         }
-        log.info("after add: {}", unitDistrictMap);
+        log.info("DistrictIndex after add: {}", unitDistrictMap);
     }
 
     @Override
@@ -67,7 +67,7 @@ public class DistrictIndex implements IndexAware<String, Set<Long>> {
 
     @Override
     public void delete(String key, Set<Long> value) {
-        log.info("before delete: {}", unitDistrictMap);
+        log.info("DistrictIndex before delete: {}", unitDistrictMap);
         // 避免全部删除
         Set<Long> unitIds = CommonUtils.getorCreate(
                 key,
@@ -83,7 +83,7 @@ public class DistrictIndex implements IndexAware<String, Set<Long>> {
                     ConcurrentSkipListSet::new);
             districts.remove(key);
         }
-        log.info("after delete: {}", unitDistrictMap);
+        log.info("DistrictIndex after delete: {}", unitDistrictMap);
     }
 
 //    public boolean match(Long unitId, List<String> districts) {
@@ -106,4 +106,5 @@ public class DistrictIndex implements IndexAware<String, Set<Long>> {
         }
         return false;
     }
+
 }

@@ -34,10 +34,16 @@ public class BinlogClient {
     public void connect() {
         // 新起一个线程去不断监听，防止主线程阻塞
         new Thread(() -> {
-
             // 配置连接信息
-            binaryLogClient = new BinaryLogClient(config.getHost(), config.getPort(),
-                    config.getUsername(), config.getPassword());
+            binaryLogClient = new BinaryLogClient(
+                    config.getHost(),
+                    config.getPort(),
+                    config.getUsername(),
+                    config.getPassword());
+
+//            binaryLogClient = new BinaryLogClient("127.0.0.1", 3306,
+//                    "root", "root");
+
             if (!StringUtils.isEmpty(config.getBinlogName()) &&
             !config.getPosition().equals(-1L)) {
                 binaryLogClient.setBinlogFilename(config.getBinlogName());
@@ -51,8 +57,10 @@ public class BinlogClient {
             try {
                 log.info("connecting to mysql start...");
                 binaryLogClient.connect();
+                System.out.println("***********连接成功");
                 log.info("connecting to mysql done...");
             } catch (IOException e) {
+                System.out.println("***********连接失败");
                 e.printStackTrace();
             }
         }).start();

@@ -25,9 +25,8 @@ import java.util.Set;
 
 /**
  * @program: tajkun-ad
- * @description:
- * 索引之间存在着层级划分，即依赖关系划分，用户与推广计划为顶层 暂时不考虑
- * 加载全量索引是增量索引“添加”的一种特殊实现
+ * @description: 索引之间存在着层级划分，即依赖关系划分，用户与推广计划为顶层 暂时不考虑
+ * 加载全量索引是增量索引“添加”的一种特殊实现，来统一加载全量索引与增量索引代码的统一
  * @author: Jiakun
  * @create: 2020-04-25 11:08
  **/
@@ -78,7 +77,7 @@ public class LevelDataHandler {
         UnitObject unitObject = DataTable.of(UnitIndex.class).get(creativeUnitTable.getUnitId());
         CreativeObject creativeObject = DataTable.of(CreativeIndex.class).get(creativeUnitTable.getCreativeId());
         if (null == unitObject || null == creativeObject) {
-            log.error("creativeUnitIndex index error : {}", JSON.toJSONString(creativeUnitTable));
+            log.error("creativeUnitTable index error : {}", JSON.toJSONString(creativeUnitTable));
             return;
         }
 

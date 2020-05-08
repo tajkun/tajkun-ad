@@ -8,7 +8,7 @@ import org.springframework.stereotype.Component;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 应用程序启动时自动运行
  * @author: Jiakun
  * @create: 2020-04-29 10:28
  **/

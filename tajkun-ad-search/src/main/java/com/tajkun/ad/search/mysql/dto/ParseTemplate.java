@@ -11,7 +11,7 @@ import java.util.function.Supplier;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 解析json模板
  * @author: Jiakun
  * @create: 2020-04-28 14:21
  **/
@@ -19,9 +19,11 @@ import java.util.function.Supplier;
 public class ParseTemplate {
 
     private String database;
+    // key为表名
     private Map<String, TableTemplate> tableTemplateMap = new HashMap<>();
 
     public static ParseTemplate parse(Template template) {
+
         ParseTemplate parseTemplate = new ParseTemplate();
         parseTemplate.setDatabase(template.getDatabase());
 
@@ -33,9 +35,9 @@ public class ParseTemplate {
             tableTemplate.setTableName(name);
             tableTemplate.setLevel(level.toString());
             parseTemplate.tableTemplateMap.put(name, tableTemplate);
+
             // 遍历操作类型对应的列
             Map<OpType, List<String>> opTypeFiledSetMap = tableTemplate.getOpTypeFieldSetMap();
-
             for (JsonTable.Column column : table.getInsert()) {
                 getAndCreateIfNeed(OpType.ADD, opTypeFiledSetMap, ArrayList::new)
                         .add(column.getColumn());

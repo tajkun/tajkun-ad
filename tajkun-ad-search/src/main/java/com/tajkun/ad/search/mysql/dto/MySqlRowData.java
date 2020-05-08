@@ -13,7 +13,7 @@ import java.util.Map;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 根据BinlogRowData构造的更简单的数据对象
  * @author: Jiakun
  * @create: 2020-04-28 20:38
  **/
@@ -26,6 +26,7 @@ public class MySqlRowData {
     // 业务用到的层级关系
     private String level;
     private OpType opType;
+    // afterData
     private List<Map<String, String>> fieldValueMap = new ArrayList<>();
 
 }

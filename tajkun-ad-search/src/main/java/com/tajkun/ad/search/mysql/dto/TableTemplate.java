@@ -11,7 +11,7 @@ import java.util.Map;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 表的操作的相关信息，表字段索引到字段名的映射
  * @author: Jiakun
  * @create: 2020-04-26 22:51
  **/
@@ -21,8 +21,10 @@ import java.util.Map;
 public class TableTemplate {
 
     private String tableName;
+    // 自定义表的逻辑级别
     private String level;
+    // map<操作类型，操作类型所对应的列>
     private Map<OpType, List<String>> opTypeFieldSetMap = new HashMap<>();
-    // 字段索引 -> 字段名
+    // map<字段索引, 字段名>
     private Map<Integer, String> posMap = new HashMap<>();
 }

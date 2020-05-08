@@ -25,9 +25,9 @@ import java.util.stream.Collectors;
 @Component
 public class KeywordIndex implements IndexAware<String, Set<Long>> {
 
-    // 反向：关键词 -> 推广单元
+    // 反向：关键词 -> 推广单元id
     private static Map<String, Set<Long>> keywordUnitMap;
-    // 正向：推广单元 -> 关键词
+    // 正向：推广单元id -> 关键词
     private static Map<Long, Set<String>> unitKeywordMap;
 
     static {
@@ -51,7 +51,7 @@ public class KeywordIndex implements IndexAware<String, Set<Long>> {
 
     @Override
     public void add(String key, Set<Long> value) {
-        log.info("before add: {}", unitKeywordMap);
+        log.info("KeywordIndex before add: {}", unitKeywordMap);
         // todo: keywordUnitMap
         Set<Long> unitIdSet = CommonUtils.getorCreate(
                 key,
@@ -66,19 +66,18 @@ public class KeywordIndex implements IndexAware<String, Set<Long>> {
                     ConcurrentSkipListSet::new);
             keywordSet.add(key);
         }
-
-        log.info("after add: {}", unitKeywordMap);
+        log.info("KeywordIndex after add: {}", unitKeywordMap);
     }
 
     @Override
     public void update(String key, Set<Long> value) {
-        // 更新操作 涉及遍历多个map set 消耗资源  暂不支持更新（直接删除再添加）
+        // 更新操作涉及遍历两个map和set,成本太高,暂不支持更新（直接删除再添加）
         log.error("keyword index can not support update");
     }
 
     @Override
     public void delete(String key, Set<Long> value) {
-        log.info("before delete: {}", unitKeywordMap);
+        log.info("KeywordIndex before delete: {}", unitKeywordMap);
         Set<Long> unitIds = CommonUtils.getorCreate(
                 key,
                 keywordUnitMap,
@@ -93,7 +92,7 @@ public class KeywordIndex implements IndexAware<String, Set<Long>> {
             );
             keywordSet.remove(key);
         }
-        log.info("after delete: {}", unitKeywordMap);
+        log.info("KeywordIndex after delete: {}", unitKeywordMap);
     }
 
     public boolean match(Long unitId, List<String> keywords) {

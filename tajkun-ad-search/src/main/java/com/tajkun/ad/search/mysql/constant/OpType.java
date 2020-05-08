@@ -17,6 +17,7 @@ public enum OpType {
 
     // EventType -> OpType
     public static OpType toOpType(EventType eventType) {
+
         switch (eventType) {
             case EXT_WRITE_ROWS:
                 return ADD;

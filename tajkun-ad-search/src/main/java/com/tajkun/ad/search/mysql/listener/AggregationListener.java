@@ -48,6 +48,7 @@ public class AggregationListener implements BinaryLogClient.EventListener {
 
     @Override
     public void onEvent(Event event) {
+
         EventType eventType = event.getHeader().getEventType();
         log.debug("event type: {}", eventType);
         if (eventType == EventType.TABLE_MAP) {
@@ -67,15 +68,15 @@ public class AggregationListener implements BinaryLogClient.EventListener {
             return;
         }
 
-        // 找出对应表有兴趣的监听器
+        // 找出对应表有兴趣的监听器 数据库中所有的表都会被监听，只需要处理需要的表
         String key = genKey(this.database, this.tableName);
         IListener iListener = this.listenerMap.get(key);
         if (null == iListener) {
             log.debug("skip {}", key);
             return;
         }
-        log.info("trigger event: {}", eventType.name());
 
+        log.info("trigger event: {}", eventType.name());
         try {
             BinlogRowData rowData = buildBinlogRowData(event.getData());
             if (rowData == null) {
@@ -88,28 +89,33 @@ public class AggregationListener implements BinaryLogClient.EventListener {
             e.printStackTrace();
             log.error(e.getMessage());
         } finally {
+            // 处理完一次监听事件后清空
             this.database = "";
             this.tableName = "";
         }
 
-
     }
 
     private BinlogRowData buildBinlogRowData(EventData eventData) {
+
         TableTemplate tableTemplate = templateHolder.getTable(tableName);
+//        System.out.println("tableTemplate: "+tableTemplate);
         if (null == tableTemplate) {
             log.warn("table {} not found", tableName);
             return null;
         }
+
         // rowData -> List<Map<String, String>>
         List<Map<String, String>> afterMapList = new ArrayList<>();
         for (Serializable[] afterValue : getAfterValues(eventData)) {
             // map<columnName, columnValue>
             Map<String, String> afterMap = new HashMap<>();
             int colLen = afterValue.length;
+            // todo: 有问题，可以考虑用includedColumns的值代替i
             for (int i = 0; i < colLen; ++i) {
                 // 取出当前位置对应的列名
                 String colName = tableTemplate.getPosMap().get(i);
+                System.out.println("i="+i+" colName="+colName);
                 // 如果没有则说明不关心这个列
                 if (null == colName) {
                     log.debug("ignore column position: {}", i);
@@ -120,20 +126,30 @@ public class AggregationListener implements BinaryLogClient.EventListener {
             }
             afterMapList.add(afterMap);
         }
+
         BinlogRowData binlogRowData = new BinlogRowData();
         binlogRowData.setAfterData(afterMapList);
         binlogRowData.setTableTemplate(tableTemplate);
+//        System.out.println("***: "+binlogRowData);
         return binlogRowData;
+
     }
 
     private List<Serializable[]> getAfterValues(EventData eventData) {
+
         if (eventData instanceof WriteRowsEventData) {
             return ((WriteRowsEventData) eventData).getRows();
         }
+
         if (eventData instanceof UpdateRowsEventData) {
+//            System.out.println("afterData--: " +
+//                    ((UpdateRowsEventData) eventData).getRows()
+//                            .stream().map(Map.Entry::getValue).collect(Collectors.toList()).toString());
+
             return ((UpdateRowsEventData) eventData).getRows()
                     .stream().map(Map.Entry::getValue).collect(Collectors.toList());
         }
+
         if (eventData instanceof DeleteRowsEventData) {
             return ((DeleteRowsEventData) eventData).getRows();
         }
