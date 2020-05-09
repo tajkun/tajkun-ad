@@ -1,11 +1,11 @@
 package com.tajkun.ad.search.sender.index;
 
 import com.alibaba.fastjson.JSON;
+import com.tajkun.ad.binlogrel.constant.Constant;
+import com.tajkun.ad.binlogrel.dto.MySqlRowData;
 import com.tajkun.ad.common.export.table.*;
 import com.tajkun.ad.search.handler.LevelDataHandler;
 import com.tajkun.ad.search.index.DataLevel;
-import com.tajkun.ad.search.mysql.constant.Constant;
-import com.tajkun.ad.search.mysql.dto.MySqlRowData;
 import com.tajkun.ad.search.sender.ISender;
 import com.tajkun.ad.search.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
@@ -17,12 +17,12 @@ import java.util.Map;
 
 /**
  * @program: tajkun-ad
- * @description: 各层级增量数据投递：MysqlRowData -> ***table -> levelHandler
+ * @description: 根据binlog数据更新索引：各层级增量数据投递：MysqlRowData -> ***table -> levelHandler
  * @author: Jiakun
  * @create: 2020-04-29 11:33
  **/
 @Slf4j
-@Component("indexSender")
+@Component
 public class IndexSender implements ISender {
 
     @Override

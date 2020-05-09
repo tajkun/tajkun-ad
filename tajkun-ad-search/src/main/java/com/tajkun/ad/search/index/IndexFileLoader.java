@@ -1,10 +1,10 @@
 package com.tajkun.ad.search.index;
 
 import com.alibaba.fastjson.JSON;
+import com.tajkun.ad.binlogrel.constant.OpType;
 import com.tajkun.ad.common.export.ExportConstant;
 import com.tajkun.ad.common.export.table.*;
 import com.tajkun.ad.search.handler.LevelDataHandler;
-import com.tajkun.ad.search.mysql.constant.OpType;
 import org.springframework.context.annotation.DependsOn;
 import org.springframework.stereotype.Component;
 

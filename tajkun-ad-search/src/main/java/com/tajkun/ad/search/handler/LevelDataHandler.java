@@ -1,6 +1,7 @@
 package com.tajkun.ad.search.handler;
 
 import com.alibaba.fastjson.JSON;
+import com.tajkun.ad.binlogrel.constant.OpType;
 import com.tajkun.ad.common.export.table.*;
 import com.tajkun.ad.search.index.DataTable;
 import com.tajkun.ad.search.index.IndexAware;
@@ -15,7 +16,6 @@ import com.tajkun.ad.search.index.plan.PlanIndex;
 import com.tajkun.ad.search.index.plan.PlanObject;
 import com.tajkun.ad.search.index.unit.UnitIndex;
 import com.tajkun.ad.search.index.unit.UnitObject;
-import com.tajkun.ad.search.mysql.constant.OpType;
 import com.tajkun.ad.search.utils.CommonUtils;
 import lombok.extern.slf4j.Slf4j;
 

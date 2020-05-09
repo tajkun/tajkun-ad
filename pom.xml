@@ -16,6 +16,8 @@
         <module>tajkun-ad-delivery</module>
         <module>tajkun-ad-search</module>
         <module>tajkun-ad-dashboard</module>
+        <module>tajkun-ad-binlogrel</module>
+        <module>tajkun-ad-binlogmq</module>
     </modules>
 
     <name>tajkun-ad</name>

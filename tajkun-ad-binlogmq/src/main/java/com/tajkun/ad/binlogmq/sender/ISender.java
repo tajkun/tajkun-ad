@@ -1,4 +1,5 @@
-package com.tajkun.ad.search.sender;
+package com.tajkun.ad.binlogmq.sender;
+
 
 import com.tajkun.ad.binlogrel.dto.MySqlRowData;
 
