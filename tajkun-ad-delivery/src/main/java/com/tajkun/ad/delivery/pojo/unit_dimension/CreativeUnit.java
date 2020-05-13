@@ -1,37 +1,40 @@
 package com.tajkun.ad.delivery.pojo.unit_dimension;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 
 /**
  * @program: tajkun-ad
- * @description: 创意与推广单元的关联表
+ * @description: 创意与推广单元关联
  * @author: Jiakun
  * @create: 2020-04-22 12:55
  **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "creative_unit")
+@Accessors(chain = true)
+@TableName(value = "creative_unit")
 public class CreativeUnit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Column(name = "creative_id", nullable = false)
+    @TableField(value = "creative_id")
     private Long creativeId;
 
-    @Column(name = "unit_id", nullable = false)
+    @TableField(value = "unit_id")
     private Long unitId;
 
     public CreativeUnit(Long creativeId, Long unitId) {
         this.creativeId = creativeId;
         this.unitId = unitId;
     }
+
 }

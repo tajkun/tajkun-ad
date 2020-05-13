@@ -1,9 +1,17 @@
 package com.tajkun.ad.delivery;
 
 import com.alibaba.fastjson.JSON;
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tajkun.ad.common.export.ExportConstant;
 import com.tajkun.ad.common.export.table.*;
 import com.tajkun.ad.delivery.constant.CommonStatus;
+import com.tajkun.ad.delivery.mapper.CreativeMapper;
+import com.tajkun.ad.delivery.mapper.PromotionPlanMapper;
+import com.tajkun.ad.delivery.mapper.PromotionUnitMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.CreativeUnitMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitDistrictMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitInterestMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitKeywordMapper;
 import com.tajkun.ad.delivery.pojo.Creative;
 import com.tajkun.ad.delivery.pojo.PromotionPlan;
 import com.tajkun.ad.delivery.pojo.PromotionUnit;
@@ -11,13 +19,6 @@ import com.tajkun.ad.delivery.pojo.unit_dimension.CreativeUnit;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitDistrict;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitInterest;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitKeyword;
-import com.tajkun.ad.delivery.repository.CreativeRepository;
-import com.tajkun.ad.delivery.repository.PromotionPlanRepository;
-import com.tajkun.ad.delivery.repository.PromotionUnitRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.CreativeUnitRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitDistrictRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitInterestRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitKeywordRepository;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.commons.collections.CollectionUtils;
 import org.junit.Test;
@@ -45,20 +46,34 @@ import java.util.List;
 @Slf4j
 public class ExportDataService {
 
+//    @Autowired
+//    private PromotionPlanRepository planRepository;
+//    @Autowired
+//    private PromotionUnitRepository unitRepository;
+//    @Autowired
+//    private CreativeRepository creativeRepository;
+//    @Autowired
+//    private CreativeUnitRepository creativeUnitRepository;
+//    @Autowired
+//    private UnitKeywordRepository unitKeywordRepository;
+//    @Autowired
+//    private UnitInterestRepository unitInterestRepository;
+//    @Autowired
+//    private UnitDistrictRepository unitDistrictRepository;
     @Autowired
-    private PromotionPlanRepository planRepository;
+    private PromotionPlanMapper planMapper;
     @Autowired
-    private PromotionUnitRepository unitRepository;
+    private PromotionUnitMapper unitMapper;
     @Autowired
-    private CreativeRepository creativeRepository;
+    private CreativeMapper creativeMapper;
     @Autowired
-    private CreativeUnitRepository creativeUnitRepository;
+    private CreativeUnitMapper creativeUnitMapper;
     @Autowired
-    private UnitKeywordRepository unitKeywordRepository;
+    private UnitKeywordMapper keywordMapper;
     @Autowired
-    private UnitInterestRepository unitInterestRepository;
+    private UnitDistrictMapper districtMapper;
     @Autowired
-    private UnitDistrictRepository unitDistrictRepository;
+    private UnitInterestMapper interestMapper;
 
     @Test
     public void exportTableData() {
@@ -75,7 +90,10 @@ public class ExportDataService {
 
     public void exportPlanTable(String fileName) {
 
-        List<PromotionPlan> plans = planRepository.findAllByPlanStatus(CommonStatus.VALID.getStatusCode());
+        QueryWrapper<PromotionPlan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("plan_status", CommonStatus.VALID.getStatusCode());
+        List<PromotionPlan> plans = planMapper.selectList(queryWrapper);
+//        List<PromotionPlan> plans = planRepository.findAllByPlanStatus(CommonStatus.VALID.getStatusCode());
         if (CollectionUtils.isEmpty(plans)) {
             return;
         }
@@ -99,7 +117,10 @@ public class ExportDataService {
 
     public void exportUnitTable(String fileName) {
 
-        List<PromotionUnit> units = unitRepository.findAllByUnitStatus(CommonStatus.VALID.getStatusCode());
+        QueryWrapper<PromotionUnit> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("unit_status", CommonStatus.VALID.getStatusCode());
+        List<PromotionUnit> units = unitMapper.selectList(queryWrapper);
+//        List<PromotionUnit> units = unitRepository.findAllByUnitStatus(CommonStatus.VALID.getStatusCode());
         if (CollectionUtils.isEmpty(units)) {
             return;
         }
@@ -122,7 +143,9 @@ public class ExportDataService {
 
     public void exportCreativeTable(String fileName) {
 
-        List<Creative> creatives = creativeRepository.findAll();
+//        List<Creative> creatives = creativeRepository.findAll();
+        QueryWrapper<Creative> queryWrapper = new QueryWrapper<>();
+        List<Creative> creatives = creativeMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(creatives)) {
             return;
         }
@@ -145,7 +168,9 @@ public class ExportDataService {
 
     public void exportCreativeUnitTable(String fileName) {
 
-        List<CreativeUnit> creativeUnits = creativeUnitRepository.findAll();
+        QueryWrapper<CreativeUnit> queryWrapper = new QueryWrapper<>();
+        List<CreativeUnit> creativeUnits = creativeUnitMapper.selectList(queryWrapper);
+//        List<CreativeUnit> creativeUnits = creativeUnitRepository.findAll();
         if (CollectionUtils.isEmpty(creativeUnits)) {
             return;
         }
@@ -168,7 +193,9 @@ public class ExportDataService {
 
     public void exportUnitDistrictTable(String fileName) {
 
-        List<UnitDistrict> unitDistricts = unitDistrictRepository.findAll();
+//        List<UnitDistrict> unitDistricts = unitDistrictRepository.findAll();
+        QueryWrapper<UnitDistrict> queryWrapper = new QueryWrapper<>();
+        List<UnitDistrict> unitDistricts = districtMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(unitDistricts)) {
             return;
         }
@@ -191,7 +218,9 @@ public class ExportDataService {
 
     public void exportUnitInterestTable(String fileName) {
 
-        List<UnitInterest> unitInterests = unitInterestRepository.findAll();
+//        List<UnitInterest> unitInterests = unitInterestRepository.findAll();
+        QueryWrapper<UnitInterest> queryWrapper = new QueryWrapper<>();
+        List<UnitInterest> unitInterests = interestMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(unitInterests)) {
             return;
         }
@@ -214,7 +243,9 @@ public class ExportDataService {
 
     public void exportUnitKeywordTable(String fileName) {
 
-        List<UnitKeyword> unitKeywords = unitKeywordRepository.findAll();
+//        List<UnitKeyword> unitKeywords = unitKeywordRepository.findAll();
+        QueryWrapper<UnitKeyword> queryWrapper = new QueryWrapper<>();
+        List<UnitKeyword> unitKeywords = keywordMapper.selectList(queryWrapper);
         if (CollectionUtils.isEmpty(unitKeywords)) {
             return;
         }

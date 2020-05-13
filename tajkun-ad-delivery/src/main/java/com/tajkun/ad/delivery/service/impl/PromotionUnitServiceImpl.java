@@ -1,20 +1,21 @@
 package com.tajkun.ad.delivery.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tajkun.ad.common.exception.AdException;
 import com.tajkun.ad.delivery.constant.Constants;
+import com.tajkun.ad.delivery.mapper.CreativeMapper;
+import com.tajkun.ad.delivery.mapper.PromotionPlanMapper;
+import com.tajkun.ad.delivery.mapper.PromotionUnitMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.CreativeUnitMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitDistrictMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitInterestMapper;
+import com.tajkun.ad.delivery.mapper.unit_dimension.UnitKeywordMapper;
 import com.tajkun.ad.delivery.pojo.PromotionPlan;
 import com.tajkun.ad.delivery.pojo.PromotionUnit;
 import com.tajkun.ad.delivery.pojo.unit_dimension.CreativeUnit;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitDistrict;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitInterest;
 import com.tajkun.ad.delivery.pojo.unit_dimension.UnitKeyword;
-import com.tajkun.ad.delivery.repository.CreativeRepository;
-import com.tajkun.ad.delivery.repository.PromotionPlanRepository;
-import com.tajkun.ad.delivery.repository.PromotionUnitRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.CreativeUnitRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitDistrictRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitInterestRepository;
-import com.tajkun.ad.delivery.repository.unit_dimension.UnitKeywordRepository;
 import com.tajkun.ad.delivery.service.IPromotionUnitService;
 import com.tajkun.ad.delivery.vo.*;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -34,29 +35,30 @@ import java.util.stream.Collectors;
 @Service
 public class PromotionUnitServiceImpl implements IPromotionUnitService {
 
-    private final PromotionPlanRepository planRepository;
-
-    private final PromotionUnitRepository unitRepository;
-
-    private final UnitKeywordRepository unitKeywordRepository;
-
-    private final UnitDistrictRepository unitDistrictRepository;
-
-    private final UnitInterestRepository unitInterestRepository;
-
-    private final CreativeRepository creativeRepository;
-
-    private final CreativeUnitRepository creativeUnitRepository;
+    private final PromotionPlanMapper planMapper;
+    private final PromotionUnitMapper unitMapper;
+    private final UnitKeywordMapper keywordMapper;
+    private final UnitDistrictMapper districtMapper;
+    private final UnitInterestMapper interestMapper;
+    private final CreativeMapper creativeMapper;
+    private final CreativeUnitMapper creativeUnitMapper;
 
     @Autowired
-    public PromotionUnitServiceImpl(PromotionPlanRepository planRepository, PromotionUnitRepository unitRepository, UnitKeywordRepository unitKeywordRepository, UnitDistrictRepository unitDistrictRepository, UnitInterestRepository unitInterestRepository, CreativeRepository creativeRepository, CreativeUnitRepository creativeUnitRepository) {
-        this.planRepository = planRepository;
-        this.unitRepository = unitRepository;
-        this.unitKeywordRepository = unitKeywordRepository;
-        this.unitDistrictRepository = unitDistrictRepository;
-        this.unitInterestRepository = unitInterestRepository;
-        this.creativeRepository = creativeRepository;
-        this.creativeUnitRepository = creativeUnitRepository;
+    public PromotionUnitServiceImpl(PromotionPlanMapper planMapper,
+                                    PromotionUnitMapper unitMapper,
+                                    UnitKeywordMapper keywordMapper,
+                                    UnitDistrictMapper districtMapper,
+                                    UnitInterestMapper interestMapper,
+                                    CreativeMapper creativeMapper,
+                                    CreativeUnitMapper creativeUnitMapper) {
+
+        this.planMapper = planMapper;
+        this.unitMapper = unitMapper;
+        this.keywordMapper = keywordMapper;
+        this.districtMapper = districtMapper;
+        this.interestMapper = interestMapper;
+        this.creativeMapper = creativeMapper;
+        this.creativeUnitMapper = creativeUnitMapper;
     }
 
     @Override
@@ -67,54 +69,67 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        Optional<PromotionPlan> promotionPlan = planRepository.findById(request.getPlanId());
-        if (!promotionPlan.isPresent()) {
+        PromotionPlan promotionPlan = planMapper.selectById(request.getPlanId());
+        if (promotionPlan == null) {
             throw new AdException(Constants.ErrorMsg.CAN_NOT_FIND_RECORD);
         }
 
-        PromotionUnit oldUnit = unitRepository.findByPlanIdAndUnitName(request.getPlanId(),request.getUnitName());
+        QueryWrapper<PromotionUnit> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("plan_id", request.getPlanId())
+                .eq("unit_name", request.getUnitName());
+        PromotionUnit oldUnit = unitMapper.selectOne(queryWrapper);
         if (oldUnit != null) {
             throw new AdException(Constants.ErrorMsg.SAME_NAME_UNIT_ERROR);
         }
 
-        PromotionUnit newUnit = unitRepository.save(
-                new PromotionUnit(request.getPlanId(), request.getUnitName(),
-                        request.getPositionType(), request.getBudget())
-        );
-
+        PromotionUnit newUnit = new PromotionUnit(request.getPlanId(), request.getUnitName(),
+                request.getPositionType(), request.getBudget());
+        unitMapper.insert(newUnit);
         return new PromotionUnitResponse(newUnit.getId(), newUnit.getUnitName());
     }
 
     @Override
+    @Transactional
     public UnitKeywordResponse createUnitKeyword(UnitKeywordRequest request) throws AdException {
+
         // 获取要创建的单元维度中的单元id
         List<Long> unitIds = request.getUnitKeywordVos().stream()
                 .map(UnitKeywordRequest.UnitKeywordVO::getUnitId)
                 .collect(Collectors.toList());
+
         // 判断这些单元id是否存在
         if (!isRelatedUnitExist(unitIds)) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
+        // 判断是否同名
+        QueryWrapper<UnitKeyword> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("unit_id", request.getUnitKeywordVos().get(0).getUnitId())
+                .eq("keyword", request.getUnitKeywordVos().get(0).getKeyword());
+        UnitKeyword oldKeyword = keywordMapper.selectOne(queryWrapper);
+        if (oldKeyword != null){
+            throw new AdException(Constants.ErrorMsg.SAME_NAME_UNIT_KEYWORD_ERROR);
+        }
+
         // 存放创建完成的单元维度的id
-        List<Long> ids = Collections.emptyList();
+        List<Long> ids = new ArrayList<>();
         // 存放要创建的单元维度
         List<UnitKeyword> unitKeywords = new ArrayList<>();
+
         // 创建单元维度
         if (!CollectionUtils.isEmpty(request.getUnitKeywordVos())) {
             request.getUnitKeywordVos().forEach(unitKeywordVo -> unitKeywords.add(
                     new UnitKeyword(unitKeywordVo.getUnitId(), unitKeywordVo.getKeyword())
             ));
-            ids = unitKeywordRepository.saveAll(unitKeywords).stream()
-                    .map(UnitKeyword::getUnitId)
-                    .collect(Collectors.toList());
+            unitKeywords.forEach(unitKeyword -> keywordMapper.insert(unitKeyword));
+            unitKeywords.forEach(unitKeyword -> ids.add(unitKeyword.getId()));
         }
         return new UnitKeywordResponse(ids);
     }
 
     @Override
-    public UnitInterestResponse createUnitInterest(UnitInterestRequest request)
-            throws AdException {
+    @Transactional
+    public UnitInterestResponse createUnitInterest(UnitInterestRequest request) throws AdException {
 
         List<Long> unitIds = request.getUnitInterestVos().stream()
                 .map(UnitInterestRequest.UnitInterestVO::getUnitId)
@@ -123,21 +138,29 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        List<Long> ids = Collections.emptyList();
+        // 判断是否同名
+        QueryWrapper<UnitInterest> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("unit_id", request.getUnitInterestVos().get(0).getUnitId())
+                .eq("interest_tag", request.getUnitInterestVos().get(0).getInterestTag());
+        UnitInterest oldInterest = interestMapper.selectOne(queryWrapper);
+        if (oldInterest != null){
+            throw new AdException(Constants.ErrorMsg.SAME_NAME_UNIT_INTEREST_ERROR);
+        }
+
+        List<Long> ids = new ArrayList<>();
         List<UnitInterest> unitInterests = new ArrayList<>();
         if (!CollectionUtils.isEmpty(request.getUnitInterestVos())) {
             request.getUnitInterestVos().forEach(unitInterestVo -> unitInterests.add(
                     new UnitInterest(unitInterestVo.getUnitId(), unitInterestVo.getInterestTag())
             ));
-            ids = unitInterestRepository.saveAll(unitInterests).stream()
-                    .map(UnitInterest::getId)
-                    .collect(Collectors.toList());
+            unitInterests.forEach(unitInterest -> interestMapper.insert(unitInterest));
+            unitInterests.forEach(unitInterest -> ids.add(unitInterest.getId()));
         }
         return new UnitInterestResponse(ids);
     }
 
-
     @Override
+    @Transactional
     public UnitDistrictResponse createUnitDistrict(UnitDistrictRequest request) throws AdException {
 
         List<Long> unitIds = request.getUnitDistrictVos().stream()
@@ -147,19 +170,29 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
+        // 判断是否同名
+        QueryWrapper<UnitDistrict> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("unit_id", request.getUnitDistrictVos().get(0).getUnitId())
+                .eq("city", request.getUnitDistrictVos().get(0).getCity());
+        UnitDistrict oldDistrict = districtMapper.selectOne(queryWrapper);
+        if (oldDistrict != null){
+            throw new AdException(Constants.ErrorMsg.SAME_NAME_UNIT_DISTRICT_ERROR);
+        }
+
         List<UnitDistrict> unitDistricts = new ArrayList<>();
         request.getUnitDistrictVos().forEach(unitDistrictVo -> unitDistricts.add(
                 new UnitDistrict(unitDistrictVo.getUnitId(), unitDistrictVo.getProvince(),
                         unitDistrictVo.getCity())
         ));
-        List<Long> ids = unitDistrictRepository.saveAll(unitDistricts).stream()
-                .map(UnitDistrict::getId)
-                .collect(Collectors.toList());
+        List<Long> ids = new ArrayList<>();
+        unitDistricts.forEach(unitDistrict -> districtMapper.insert(unitDistrict));
+        unitDistricts.forEach(unitDistrict -> ids.add(unitDistrict.getId()));
 
         return new UnitDistrictResponse(ids);
     }
 
     @Override
+    @Transactional
     public CreativeUnitResponse createCreativeUnit(CreativeUnitRequest request) throws AdException {
 
         List<Long> unitIds = request.getCreativeUnitItems().stream()
@@ -172,13 +205,22 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
+        // 判断是否已存在关联关系
+        QueryWrapper<CreativeUnit> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("creative_id", request.getCreativeUnitItems().get(0).getCreativeId())
+                .eq("unit_id", request.getCreativeUnitItems().get(0).getUnitId());
+        CreativeUnit oldCreativeUnit = creativeUnitMapper.selectOne(queryWrapper);
+        if (oldCreativeUnit != null) {
+            throw new AdException(Constants.ErrorMsg.SAME_RELATION_CREATIVE_UNIT_ERROR);
+        }
+
         List<CreativeUnit> creativeUnits = new ArrayList<>();
         request.getCreativeUnitItems().forEach(creativeUnitItem -> creativeUnits.add(
                 new CreativeUnit(creativeUnitItem.getCreativeId(), creativeUnitItem.getUnitId())
         ));
-        List<Long> ids = creativeUnitRepository.saveAll(creativeUnits).stream()
-                .map(CreativeUnit::getId)
-                .collect(Collectors.toList());
+        List<Long> ids = new ArrayList<>();
+        creativeUnits.forEach(creativeUnit -> creativeUnitMapper.insert(creativeUnit));
+        creativeUnits.forEach(creativeUnit -> ids.add(creativeUnit.getId()));
 
         return new CreativeUnitResponse(ids);
     }
@@ -189,15 +231,17 @@ public class PromotionUnitServiceImpl implements IPromotionUnitService {
         if (CollectionUtils.isEmpty(unitIds)) {
             return false;
         }
+
         // 是否有重复
-        return unitRepository.findAllById(unitIds).size() == new HashSet<>(unitIds).size();
+        return unitMapper.selectBatchIds(unitIds).size() == new HashSet<>(unitIds).size();
     }
 
     private boolean isRelatedCreativeExist(List<Long> creativeIds) {
         if (CollectionUtils.isEmpty(creativeIds)) {
             return false;
         }
-        return creativeRepository.findAllById(creativeIds).size() == new HashSet<>(creativeIds).size();
+
+        return creativeMapper.selectBatchIds(creativeIds).size() == new HashSet<>(creativeIds).size();
     }
 
 }

@@ -1,10 +1,14 @@
 package com.tajkun.ad.delivery.pojo.unit_dimension;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 
 /**
  * @program: tajkun-ad
@@ -15,23 +19,22 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ad_unit_interest")
+@Accessors(chain = true)
+@TableName(value = "ad_unit_interest")
 public class UnitInterest {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Column(name = "unit_id", nullable = false)
+    @TableField(value = "unit_id")
     private Long unitId;
 
-    @Column(name = "interest_tag", nullable = false)
+    @TableField(value = "interest_tag")
     private String interestTag;
 
     public UnitInterest(Long unitId, String interestTag) {
         this.unitId = unitId;
         this.interestTag = interestTag;
     }
+
 }

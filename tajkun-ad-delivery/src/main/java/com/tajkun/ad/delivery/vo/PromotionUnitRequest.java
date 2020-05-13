@@ -25,4 +25,5 @@ public class PromotionUnitRequest {
         return null != planId && !StringUtils.isEmpty(unitName)
                 && positionType != null && budget != null;
     }
+
 }

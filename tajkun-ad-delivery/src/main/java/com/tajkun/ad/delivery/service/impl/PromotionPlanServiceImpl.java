@@ -1,12 +1,13 @@
 package com.tajkun.ad.delivery.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tajkun.ad.common.exception.AdException;
 import com.tajkun.ad.delivery.constant.CommonStatus;
 import com.tajkun.ad.delivery.constant.Constants;
+import com.tajkun.ad.delivery.mapper.PromotionPlanMapper;
+import com.tajkun.ad.delivery.mapper.UserMapper;
 import com.tajkun.ad.delivery.pojo.PromotionPlan;
 import com.tajkun.ad.delivery.pojo.User;
-import com.tajkun.ad.delivery.repository.PromotionPlanRepository;
-import com.tajkun.ad.delivery.repository.UserRepository;
 import com.tajkun.ad.delivery.service.IPromotionPlanService;
 import com.tajkun.ad.delivery.utils.CommonUtils;
 import com.tajkun.ad.delivery.vo.PromotionPlanGetRequest;
@@ -18,7 +19,6 @@ import org.springframework.transaction.annotation.Transactional;
 
 import java.util.Date;
 import java.util.List;
-import java.util.Optional;
 
 /**
  * @program: tajkun-ad
@@ -29,14 +29,13 @@ import java.util.Optional;
 @Service
 public class PromotionPlanServiceImpl implements IPromotionPlanService {
 
-    private final UserRepository userRepository;
-
-    private final PromotionPlanRepository promotionPlanRepository;
+    private final UserMapper userMapper;
+    private final PromotionPlanMapper planMapper;
 
     @Autowired
-    public PromotionPlanServiceImpl(UserRepository userRepository, PromotionPlanRepository promotionPlanRepository) {
-        this.userRepository = userRepository;
-        this.promotionPlanRepository = promotionPlanRepository;
+    public PromotionPlanServiceImpl(UserMapper userMapper, PromotionPlanMapper planMapper) {
+        this.userMapper = userMapper;
+        this.planMapper = planMapper;
     }
 
     @Override
@@ -48,25 +47,25 @@ public class PromotionPlanServiceImpl implements IPromotionPlanService {
         }
 
         // 确保关联的用户存在
-        Optional<User> user = userRepository.findById(request.getUserId());
-        if (!user.isPresent()) {
+        User user = userMapper.selectById(request.getUserId());
+        if (user == null) {
             throw new AdException(Constants.ErrorMsg.CAN_NOT_FIND_RECORD);
         }
 
-        PromotionPlan oldPlan = promotionPlanRepository.findByUserIdAndPlanName(
-                request.getUserId(),
-                request.getPlanName());
+        QueryWrapper<PromotionPlan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("user_id", request.getUserId())
+                .eq("plan_name", request.getPlanName());
+        PromotionPlan oldPlan = planMapper.selectOne(queryWrapper);
         if (oldPlan != null) {
             throw new AdException(Constants.ErrorMsg.SAME_NAME_PLAN_ERROR);
         }
 
-        PromotionPlan newPromotionPlan = promotionPlanRepository.save(
-                new PromotionPlan(request.getUserId(),
-                        request.getPlanName(),
-                        CommonUtils.parseStringToDate(request.getStartDate()),
-                        CommonUtils.parseStringToDate(request.getEndDate()))
-        );
-        return new PromotionPlanResponse(newPromotionPlan.getId(), newPromotionPlan.getPlanName());
+        PromotionPlan newPlan = new PromotionPlan(request.getUserId(),
+                request.getPlanName(),
+                CommonUtils.parseStringToDate(request.getStartDate()),
+                CommonUtils.parseStringToDate(request.getEndDate()));
+        planMapper.insert(newPlan);
+        return new PromotionPlanResponse(newPlan.getId(), newPlan.getPlanName());
     }
 
     @Override
@@ -77,20 +76,24 @@ public class PromotionPlanServiceImpl implements IPromotionPlanService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        return promotionPlanRepository.findAllByIdInAndUserId(
-                request.getIds(), request.getUserId());
+        QueryWrapper<PromotionPlan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.in("id",request.getIds())
+                .eq("user_id", request.getUserId());
+        return planMapper.selectList(queryWrapper);
     }
 
     @Override
+    @Transactional
     public PromotionPlanResponse updatePromotionPlan(PromotionPlanRequest request) throws AdException {
 
         if (!request.updateValidate()) {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        PromotionPlan promotionPlan = promotionPlanRepository.findByIdAndUserId(
-                request.getId(),
-                request.getUserId());
+        QueryWrapper<PromotionPlan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", request.getId())
+                .eq("user_id", request.getUserId());
+        PromotionPlan promotionPlan = planMapper.selectOne(queryWrapper);
         if (promotionPlan == null) {
             throw new AdException(Constants.ErrorMsg.CAN_NOT_FIND_RECORD);
         }
@@ -107,7 +110,7 @@ public class PromotionPlanServiceImpl implements IPromotionPlanService {
         }
 
         promotionPlan.setUpdateTime(new Date());
-        promotionPlan = promotionPlanRepository.save(promotionPlan);
+        planMapper.updateById(promotionPlan);
         return new PromotionPlanResponse(promotionPlan.getId(), promotionPlan.getPlanName());
     }
 
@@ -119,15 +122,17 @@ public class PromotionPlanServiceImpl implements IPromotionPlanService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        PromotionPlan promotionPlan = promotionPlanRepository.findByIdAndUserId(
-                request.getId(), request.getUserId()
-        );
+        QueryWrapper<PromotionPlan> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("id", request.getId())
+                .eq("user_id", request.getUserId());
+        PromotionPlan promotionPlan = planMapper.selectOne(queryWrapper);
         if (promotionPlan == null) {
             throw new AdException(Constants.ErrorMsg.CAN_NOT_FIND_RECORD);
         }
 
         promotionPlan.setPlanStatus(CommonStatus.INVALID.getStatusCode());
         promotionPlan.setUpdateTime(new Date());
-        promotionPlanRepository.save(promotionPlan);
+        planMapper.updateById(promotionPlan);
     }
+
 }

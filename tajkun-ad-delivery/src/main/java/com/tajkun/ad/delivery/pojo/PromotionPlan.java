@@ -1,11 +1,15 @@
 package com.tajkun.ad.delivery.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.tajkun.ad.delivery.constant.CommonStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -17,35 +21,33 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ad_plan")
+@Accessors(chain = true)
+@TableName(value = "ad_plan")
 public class PromotionPlan {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
     // 在业务层维护外键关系，而不在数据层维护
-    @Column(name = "user_id", nullable = false)
+    @TableField(value = "user_id")
     private Long userId;
 
-    @Column(name = "plan_name", nullable = false)
+    @TableField(value = "plan_name")
     private String planName;
 
-    @Column(name = "plan_status", nullable = false)
+    @TableField(value = "plan_status")
     private Integer planStatus;
 
-    @Column(name = "start_date", nullable = false)
+    @TableField(value = "start_date")
     private Date startDate;
 
-    @Column(name = "end_date", nullable = false)
+    @TableField(value = "end_date")
     private Date endDate;
 
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", nullable = false)
+    @TableField(value = "update_time")
     private Date updateTime;
 
     public PromotionPlan(Long userId, String planName, Date startDate, Date endDate) {
@@ -57,6 +59,5 @@ public class PromotionPlan {
         this.createTime = new Date();
         this.updateTime = this.createTime;
     }
-
 
 }

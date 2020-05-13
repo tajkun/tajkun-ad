@@ -1,53 +1,54 @@
 package com.tajkun.ad.delivery.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.tajkun.ad.delivery.constant.CommonStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 推广单元
  * @author: Jiakun
  * @create: 2020-04-22 10:50
  **/
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ad_unit")
+@Accessors(chain = true)
+@TableName(value = "ad_unit")
 public class PromotionUnit {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Column(name = "plan_id", nullable = false)
+    @TableField(value = "plan_id")
     private Long planId;
 
-    @Column(name = "unit_name", nullable = false)
+    @TableField(value = "unit_name")
     private String unitName;
 
-    @Column(name = "unit_status", nullable = false)
+    @TableField(value = "unit_status")
     private Integer unitStatus;
 
     // 广告位类型（开屏，贴片，中贴，暂停贴...）
-    @Column(name = "position_type", nullable = false)
+    @TableField(value = "position_type")
     private Integer positionType;
 
-    @Column(name = "budget", nullable = false)
+    @TableField(value = "budget")
     private Long budget;
 
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", nullable = false)
+    @TableField(value = "update_time")
     private Date updateTime;
-
 
     public PromotionUnit(Long planId, String unitName, Integer positionType, Long budget) {
         this.planId = planId;
@@ -58,4 +59,5 @@ public class PromotionUnit {
         this.createTime = new Date();
         this.updateTime = this.createTime;
     }
+
 }

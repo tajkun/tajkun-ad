@@ -51,6 +51,7 @@ public class PromotionUnitController {
         return promotionUnitService.createUnitDistrict(request);
     }
 
+    @PostMapping("/create/creativeUnit")
     public CreativeUnitResponse createCreativeUnit(@RequestBody CreativeUnitRequest request) throws AdException {
         log.info("tajkun-ad-delivery: createCreativeUnit -> {}", JSON.toJSONString(request));
         return promotionUnitService.createCreativeUnit(request);

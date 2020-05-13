@@ -1,11 +1,15 @@
 package com.tajkun.ad.delivery.pojo;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import com.tajkun.ad.delivery.constant.CommonStatus;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 import java.util.Date;
 
 /**
@@ -17,30 +21,27 @@ import java.util.Date;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ad_user")
+@Accessors(chain = true)
+@TableName(value = "ad_user")
 public class User {
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Basic //默认为Basic
-    @Column(name = "username", nullable = false)
+    @TableField(value = "username")
     private String username;
 
-    @Column(name = "token", nullable = false)
+    @TableField(value = "token")
     private String token;
 
-    @Column(name = "user_status", nullable = false)
+    @TableField(value = "user_status")
     private Integer userStatus;
 
-    @Column(name = "create_time", nullable = false)
+    @TableField(value = "create_time")
     private Date createTime;
 
-    @Column(name = "update_time", unique = false)
+    @TableField(value = "update_time")
     private Date updateTime;
-
 
     public User(String username, String token) {
         this.username = username;

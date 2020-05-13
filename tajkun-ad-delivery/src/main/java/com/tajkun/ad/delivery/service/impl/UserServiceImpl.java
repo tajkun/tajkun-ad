@@ -1,9 +1,10 @@
 package com.tajkun.ad.delivery.service.impl;
 
+import com.baomidou.mybatisplus.core.conditions.query.QueryWrapper;
 import com.tajkun.ad.common.exception.AdException;
 import com.tajkun.ad.delivery.constant.Constants;
+import com.tajkun.ad.delivery.mapper.UserMapper;
 import com.tajkun.ad.delivery.pojo.User;
-import com.tajkun.ad.delivery.repository.UserRepository;
 import com.tajkun.ad.delivery.service.IUserService;
 import com.tajkun.ad.delivery.utils.CommonUtils;
 import com.tajkun.ad.delivery.vo.CreateUserRequest;
@@ -23,11 +24,11 @@ import org.springframework.transaction.annotation.Transactional;
 @Service
 public class UserServiceImpl implements IUserService {
 
-    private final UserRepository userRepository;
+    private final UserMapper userMapper;
 
     @Autowired
-    public UserServiceImpl(UserRepository userRepository) {
-        this.userRepository = userRepository;
+    public UserServiceImpl(UserMapper userMapper) {
+        this.userMapper = userMapper;
     }
 
     @Override
@@ -37,18 +38,18 @@ public class UserServiceImpl implements IUserService {
             throw new AdException(Constants.ErrorMsg.REQUEST_PARAM_ERROR);
         }
 
-        User oldUser = userRepository.findByUsername(request.getUsername());
+        QueryWrapper<User> queryWrapper = new QueryWrapper<>();
+        queryWrapper.eq("username", request.getUsername());
+        User oldUser = userMapper.selectOne(queryWrapper);
         if (oldUser != null) {
             throw new AdException(Constants.ErrorMsg.SAME_NAME_USER_ERROR);
         }
 
-        User newUser = userRepository.save(new User(
-                request.getUsername(),
-                CommonUtils.md5(request.getUsername())));
+        User newUser = new User(request.getUsername(), CommonUtils.md5(request.getUsername()));
+        userMapper.insert(newUser);
 
         return new CreateUserResponse(newUser.getId(), newUser.getUsername(), newUser.getToken(),
                 newUser.getCreateTime(), newUser.getUpdateTime());
     }
-
 
 }

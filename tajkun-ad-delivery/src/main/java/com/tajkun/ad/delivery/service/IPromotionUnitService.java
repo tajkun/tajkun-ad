@@ -1,6 +1,9 @@
 package com.tajkun.ad.delivery.service;
 
+import com.baomidou.mybatisplus.extension.service.IService;
 import com.tajkun.ad.common.exception.AdException;
+import com.tajkun.ad.delivery.pojo.unit_dimension.UnitDistrict;
+import com.tajkun.ad.delivery.pojo.unit_dimension.UnitKeyword;
 import com.tajkun.ad.delivery.vo.*;
 
 /**
@@ -9,7 +12,7 @@ import com.tajkun.ad.delivery.vo.*;
  * @author: Jiakun
  * @create: 2020-04-23 10:35
  **/
-public interface IPromotionUnitService {
+public interface IPromotionUnitService{
 
     PromotionUnitResponse createPromotionUnit(PromotionUnitRequest request) throws AdException;
 

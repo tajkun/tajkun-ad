@@ -1,10 +1,14 @@
 package com.tajkun.ad.delivery.pojo.unit_dimension;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableField;
+import com.baomidou.mybatisplus.annotation.TableId;
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.AllArgsConstructor;
 import lombok.Data;
 import lombok.NoArgsConstructor;
+import lombok.experimental.Accessors;
 
-import javax.persistence.*;
 
 /**
  * @program: tajkun-ad
@@ -15,22 +19,20 @@ import javax.persistence.*;
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
-@Entity
-@Table(name = "ad_unit_district")
+@Accessors(chain = true)
+@TableName(value = "ad_unit_district")
 public class UnitDistrict {
 
-    @Id
-    @GeneratedValue(strategy = GenerationType.IDENTITY)
-    @Column(name = "id", nullable = false)
+    @TableId(value = "id", type = IdType.AUTO)
     private Long id;
 
-    @Column(name = "unit_id", nullable = false)
+    @TableField(value = "unit_id")
     private Long unitId;
 
-    @Column(name = "province", nullable = false)
+    @TableField(value = "province")
     private String province;
 
-    @Column(name = "city", nullable = false)
+    @TableField(value = "city")
     private String city;
 
     public UnitDistrict(Long unitId, String province, String city) {
@@ -38,4 +40,5 @@ public class UnitDistrict {
         this.province = province;
         this.city = city;
     }
+
 }
