@@ -48,11 +48,10 @@
             <version>8.0.12</version>
             <scope>runtime</scope>
         </dependency>
-        <!--kafka-->
+        <!-- rabbitmq -->
         <dependency>
-            <groupId>org.springframework.kafka</groupId>
-            <artifactId>spring-kafka</artifactId>
-            <version>2.1.5.RELEASE</version>
+            <groupId>org.springframework.boot</groupId>
+            <artifactId>spring-boot-starter-amqp</artifactId>
         </dependency>
         <dependency>
             <groupId>com.tajkun.ad</groupId>

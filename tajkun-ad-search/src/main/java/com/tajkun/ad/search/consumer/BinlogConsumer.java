@@ -4,17 +4,18 @@ import com.alibaba.fastjson.JSON;
 import com.tajkun.ad.binlogrel.dto.MySqlRowData;
 import com.tajkun.ad.search.sender.ISender;
 import lombok.extern.slf4j.Slf4j;
-import org.apache.kafka.clients.consumer.ConsumerRecord;
-import org.apache.kafka.clients.consumer.ConsumerRecords;
+import org.springframework.amqp.core.ExchangeTypes;
+import org.springframework.amqp.rabbit.annotation.Exchange;
+import org.springframework.amqp.rabbit.annotation.Queue;
+import org.springframework.amqp.rabbit.annotation.QueueBinding;
+import org.springframework.amqp.rabbit.annotation.RabbitListener;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.kafka.annotation.KafkaListener;
 import org.springframework.stereotype.Component;
 
-import java.util.Optional;
 
 /**
  * @program: tajkun-ad
- * @description:
+ * @description: 消息接收方
  * @author: Jiakun
  * @create: 2020-05-09 17:29
  **/
@@ -29,18 +30,19 @@ public class BinlogConsumer {
         this.sender = sender;
     }
 
-    // 监听方法
-    @KafkaListener(topics = {"tajkun-ad-binlog-mysql-rowData"}, groupId = "tajkun-ad-search")
-    public void processMysqlRowData(ConsumerRecord<?, ?> record) {
-
-        Optional<?> kafkaMessage = Optional.ofNullable(record.value());
-        if (kafkaMessage.isPresent()) {
-            Object message = kafkaMessage.get();
-            MySqlRowData rowData = JSON.parseObject(message.toString(), MySqlRowData.class);
-            log.info("kafka process MysqlRowData: {}", JSON.toJSONString(rowData));
+    @RabbitListener(bindings = @QueueBinding(
+            value = @Queue(value = "ad.binlog.queue", durable = "true"),
+            exchange = @Exchange(
+                    value = "tajkun.ad.binlog.exchange",
+                    ignoreDeclarationExceptions = "true",
+                    type = ExchangeTypes.TOPIC),
+            key = {"ad.binlog.mysqlRowData"}))
+    public void processMysqlRowData(String rabbitmqMessage) {
+        if (rabbitmqMessage != null) {
+            MySqlRowData rowData = JSON.parseObject(rabbitmqMessage, MySqlRowData.class);
+            log.info("rabbitmq process MysqlRowData: {}", JSON.toJSONString(rowData));
             sender.sender(rowData);
         }
-
     }
 
 }

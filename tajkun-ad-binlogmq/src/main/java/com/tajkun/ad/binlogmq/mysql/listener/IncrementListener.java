@@ -29,7 +29,7 @@ public class IncrementListener implements IListener{
 
     private final AggregationListener aggregationListener;
 
-    @Resource
+    @Resource(name = "rabbitmqSender")
     private ISender sender;
 
     @Autowired

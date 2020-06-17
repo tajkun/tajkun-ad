@@ -22,10 +22,19 @@ spring:
       max-active: 4
       min-idle: 2
       initial-size: 2
-  kafka:
-    bootstrap-servers: 39.97.102.53:9092
-    listener:
-      concurrency: 4
+
+  rabbitmq:
+    host: 39.97.102.53
+    username: ad-binlog
+    password: root
+    virtual-host: /ad-binlog
+    template:
+      exchange: tajkun.ad.binlog.exchange  # 缺省的交换机名称
+    publisher-confirms: true # 生产者确认机制，确保消息正确发送，发送失败会有错误回执，从而触发重试
+#  kafka:
+#    bootstrap-servers: 39.97.102.53:9092
+#    listener:
+#      concurrency: 4
 
 eureka:
   client:
@@ -41,5 +50,6 @@ adconfig:
     binlogName:
     position: -1
 
-  kafka:
-    topic: tajkun-ad-binlog-mysql-rowData
+  rabbitmq:
+    topic: ad.binlog.mysqlRowData
+

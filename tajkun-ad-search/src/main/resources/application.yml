@@ -1,5 +1,5 @@
 server:
-  port: 7001
+  port: 8010
   servlet:
     context-path: /search   # 相当于请求controller的前缀
 
@@ -21,10 +21,12 @@ spring:
       max-active: 4  # 数据库连接池最大连接数
       min-idle: 2    # 最小连接数
       initial-size: 2 #默认连接数
-  kafka:
-    bootstrap-servers: 39.97.102.53:9092
-    listener:
-      concurrency: 4
+
+  rabbitmq:
+    host: 39.97.102.53
+    username: ad-binlog
+    password: root
+    virtual-host: /ad-binlog
 
 eureka:
   client:
@@ -50,6 +52,3 @@ adconfig:
     password: root
     binlogName: ""  # binlog文件名
     position: -1    # -1表示从当前位置开始
-
-  kafka:
-    topic: tajkun-ad-binlog-mysql-rowData

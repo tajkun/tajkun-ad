@@ -46,20 +46,6 @@ import java.util.List;
 @Slf4j
 public class ExportDataService {
 
-//    @Autowired
-//    private PromotionPlanRepository planRepository;
-//    @Autowired
-//    private PromotionUnitRepository unitRepository;
-//    @Autowired
-//    private CreativeRepository creativeRepository;
-//    @Autowired
-//    private CreativeUnitRepository creativeUnitRepository;
-//    @Autowired
-//    private UnitKeywordRepository unitKeywordRepository;
-//    @Autowired
-//    private UnitInterestRepository unitInterestRepository;
-//    @Autowired
-//    private UnitDistrictRepository unitDistrictRepository;
     @Autowired
     private PromotionPlanMapper planMapper;
     @Autowired
