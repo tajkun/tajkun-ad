@@ -18,6 +18,7 @@
         <module>tajkun-ad-dashboard</module>
         <module>tajkun-ad-binlogrel</module>
         <module>tajkun-ad-binlogmq</module>
+        <module>tajkun-ad-datadump</module>
     </modules>
 
     <name>tajkun-ad</name>

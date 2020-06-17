@@ -1,0 +1,32 @@
+server:
+  port: 8011
+  servlet:
+    context-path: /datadump
+
+spring:
+  application:
+    name: tajkun-ad-datadump
+
+  datasource:
+    url: jdbc:mysql://127.0.0.1:3306/tajkun_ad?autoReconnect=true&useSSL=false&serverTimezone=Asia/Shanghai
+    username: root
+    password: root
+    driver-class-name: com.mysql.jdbc.Driver
+    type: com.alibaba.druid.pool.DruidDataSource
+    initialSize: 2
+    minIdle: 1
+    maxActive: 6
+    maxWait: 60000
+
+mybatis-plus:
+  global-config:
+    db-config:
+      insert-strategy: not_empty
+      update-strategy: not_empty
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl
+
+eureka:
+  client:
+    service-url:
+      defaultZone: http://server1:8000/eureka/

@@ -18,3 +18,7 @@ zuul:
       path: /search/**
       serviceId: tajkun-ad-search
       strip-prefix: false
+    datadump:
+      path: /datadump/**
+      serviceId: tajkun-ad-datadump
+      strip-prefix: false
